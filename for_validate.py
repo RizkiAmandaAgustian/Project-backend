@@ -1,11 +1,37 @@
-def validation (seri_laptop,support_thunderbolt):
+def for_validation_kategori (label):
     error = []
-    if seri_laptop is None :
-        error.append('masukkan seri laptop')
-    if support_thunderbolt is None :
-        error.append('Masukkan apakah laptop seri ini support thunderbolt atau tidak')
-    else:
-        if support_thunderbolt not in ['0','1']:
-            error.append('masukkan 0 atau 1 sebagai penanda apakah laptop tersebut support thunderbolt atau tidak')
+    if label is None :
+        error.append('masukkan label laptop')
+    # if support_thunderbolt is None :
+    #     error.append('Masukkan apakah laptop seri ini support thunderbolt atau tidak')
+    # else:
+    #     if support_thunderbolt not in ['0','1']:
+    #         error.append('masukkan 0 atau 1 sebagai penanda apakah laptop tersebut support thunderbolt atau tidak')
     if len (error)> 0 :
+        return {'error':error}
+    
+def for_validation_barang (nama_barang, deskripsi, harga, stok, kategori_id):
+    error = []
+    if nama_barang is None :
+        error.append('masukkan nama_barang')
+    if harga is None :
+        error.append('masukkan harga')
+    if deskripsi is None :
+        error.append('masukkan deskripsi')
+    if stok is None :
+        error.append('masukkan stok')
+    if kategori_id is None :
+        error.append('masukkan kategori_id')
+    if len (error)>0:
+        return {'error':error}
+    
+def for_validation_keranjang (user_id, barang_id, kuantitas,):
+    error = []
+    if user_id is None :
+        error.append('masukkan user_id')
+    if kuantitas is None :
+        error.append('masukkan kuantitas')
+    if barang_id is None :
+        error.append('masukkan barang_id')
+    if len (error)>0:
         return {'error':error}
