@@ -1,7 +1,7 @@
 import flask
 import for_mechanism
 from flask import request
-from for_validate import for_validation_kategori,for_validation_barang,for_validation_keranjang
+from for_validate import for_validation_kategori,for_validation_barang,for_validation_keranjang,for_validation_transaksi,for_validation_transaksi_detail
 from flask_jwt_extended import(
     JWTManager,
     jwt_required,
@@ -162,16 +162,112 @@ def hapus_keranjang(id):
 def edit_keranjang(id): 
     if for_mechanism.pick_id_keranjang(id) is None:
         return '' , 404
-    nama_barang = request.form.get('nama_barang')
-    deskripsi = request.form.get('deskripsi')
-    harga = request.form.get('harga')
-    stok = request.form.get('stok')
-    kategori_id = request.form.get('kategori_id')
+    user_id = request.form.get('user_id')
+    barang_id = request.form.get('barang_id')
+    kuantitas = request.form.get('kuantitas')
 
-    validated = for_validation_keranjang (nama_barang,deskripsi,harga,stok,kategori_id)
+    validated = for_validation_keranjang (user_id,barang_id,kuantitas)
     if validated is not None :
         return validated,404
-    for_mechanism.edit_keranjang(id,nama_barang,deskripsi,harga,stok,kategori_id)
+    for_mechanism.edit_keranjang(id,user_id,barang_id,kuantitas)
+    return '', 200
+
+
+
+# TRANSAKSI
+
+@app.get('/transaksi')
+def get_all_transaksi():
+    return for_mechanism.get_all_data_transaksi()
+
+@app.post('/transaksi')
+def create_transaksi():
+    nama_lengkap = request.form.get('nama_lengkap')
+    alamat = request.form.get('alamat')
+    user_id = request.form.get('user_id')
+
+    validated = for_validation_transaksi (nama_lengkap,alamat,user_id)
+    if validated is not None :
+        return validated,404
+    for_mechanism.create_transaksi(nama_lengkap,alamat,user_id)
+    return '',200
+
+@app.get('/transaksi/<int:id>')
+def ambil_id_transaksi(id):
+    get_id = for_mechanism.pick_id_transaksi(id)
+    if get_id is None :
+        return '', 404
+    return for_mechanism.pick_id_transaksi(id)
+
+@app.delete('/transaksi/<int:id>')
+def hapus_transaksi(id):
+    get_id = for_mechanism.pick_id_transaksi(id)
+    if get_id is None:
+        return '', 404
+    for_mechanism.delete_transaksi(id)
+    return '',200
+
+@app.put('/transaksi/<int:id>')
+def edit_transaksi(id): 
+    if for_mechanism.pick_id_transaksi(id) is None:
+        return '' , 404
+    nama_lengkap = request.form.get('nama_lengkap')
+    alamat = request.form.get('alamat')
+    user_id = request.form.get('user_id')
+
+    validated = for_validation_transaksi (nama_lengkap,alamat,user_id)
+    if validated is not None :
+        return validated,404
+    for_mechanism.edit_transaksi(id,nama_lengkap,alamat,user_id)
+    return '', 200
+
+#transaksi_detail
+
+@app.get('/transaksi_detail')
+def get_all_transaksi_detail():
+    return for_mechanism.get_all_data_transaksi_detail()
+
+@app.post('/transaksi_detail')
+def create_transaksi_detail():
+    transaksi_id = request.form.get('transaksi_id')
+    barang_id = request.form.get('barang_id')
+    kuantitas = request.form.get('kuantitas')
+    harga = request.form.get('harga')
+
+    validated = for_validation_transaksi_detail (transaksi_id,barang_id,kuantitas,harga)
+    if validated is not None :
+        return validated,404
+    for_mechanism.create_transaksi_detail(transaksi_id,barang_id,kuantitas,harga)
+    return '',200
+
+@app.get('/transaksi_detail/<int:id>')
+def ambil_id_transaksi_detail(id):
+    get_id = for_mechanism.pick_id_transaksi_detail(id)
+    if get_id is None :
+        return '', 404
+    return for_mechanism.pick_id_transaksi_detail(id)
+
+@app.delete('/transaksi_detail/<int:id>')
+def hapus_transaksi_detail(id):
+    get_id = for_mechanism.pick_id_transaksi_detail(id)
+    if get_id is None:
+        return '', 404
+    for_mechanism.delete_transaksi_detail(id)
+    return '',200
+
+@app.put('/transaksi_detail/<int:id>')
+def edit_transaksi_detail(id): 
+    if for_mechanism.pick_id_transaksi_detail(id) is None:
+        return '' , 404
+    transaksi_id = request.form.get('transaksi_id')
+    barang_id = request.form.get('barang_id')
+    kuantitas = request.form.get('kuantitas')
+    harga = request.form.get('harga')
+
+    validated = for_validation_transaksi_detail (transaksi_id,barang_id,kuantitas,harga)
+    if validated is not None :
+        return validated,404
+    for_mechanism.edit_transaksi_detail(id,transaksi_id,barang_id,kuantitas,harga)
     return '', 200
 
 

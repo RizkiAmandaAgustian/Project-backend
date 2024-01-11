@@ -251,3 +251,161 @@ def edit_keranjang (id,user_id:int,barang_id:int,kuantitas:int):
         raise e 
     finally : 
         connection.close()
+
+# TRANSAKSI
+        
+def get_all_data_transaksi ():
+    connection = koneksidatabase.cursor()
+    try:
+        connection.execute('SELECT id, nama_lengkap, alamat, tanggal_transaksi, user_id FROM transaksi ')
+        result = connection.fetchall()
+        new_data = []
+        for transaksi in result :
+            data_baru = {
+                'id' : transaksi [0],
+                'nama_lengkap': transaksi [1],
+                'alamat' : transaksi [2],
+                'tanggal_transaksi' : transaksi [3],
+                'user_id' : transaksi [4],
+            }
+            new_data.append(data_baru)
+        koneksidatabase.commit()
+    except Exception as e :
+        koneksidatabase.rollback()
+        raise e 
+    finally :
+        koneksidatabase.close()
+    return new_data
+
+def create_transaksi (nama_lengkap :str, alamat : str , user_id :int):
+    connection = koneksidatabase.cursor()
+    try:
+        connection.execute('INSERT INTO transaksi (nama_lengkap,alamat,user_id) VALUES (%s,%s,%s)',(nama_lengkap,alamat,user_id))
+        koneksidatabase.commit()
+    except Exception as e :
+        koneksidatabase.rollback()
+        raise e 
+    finally:
+        connection.close()
+
+def pick_id_transaksi (id):
+    connection = koneksidatabase.cursor()
+    try:
+        connection.execute('SELECT id, nama_lengkap, alamat, tanggal_transaksi, user_id from transaksi where id = %s',(id,))
+        transaksi = connection.fetchone()
+        koneksidatabase.commit()
+    except Exception as e :
+        koneksidatabase.rollback()
+        raise e 
+    finally :
+        connection.close()
+    if transaksi is None:
+        return None
+    return{
+        'id': transaksi [0],
+        'nama_lengkap' : transaksi [1],
+        'alamat' : transaksi [2],
+        'tanggal_transaksi' : transaksi [3],
+        'user_id' : transaksi [4]
+    }
+
+def delete_transaksi (id):
+    connection = koneksidatabase.cursor()
+    try:
+        connection.execute('DELETE from transaksi where id = %s',(id,))
+        koneksidatabase.commit()
+    except Exception as e :
+        koneksidatabase.rollback()
+        raise e 
+    finally :
+        connection.close()
+
+def edit_transaksi (id,nama_lengkap :str, alamat : str , user_id :int):
+    connection = koneksidatabase.cursor()
+    try:
+        connection.execute('UPDATE transaksi SET nama_lengkap =%s, alamat =%s, user_id =%s WHERE id = %s',(nama_lengkap,alamat,user_id,id))
+        koneksidatabase.commit()
+    except Exception as e :
+        koneksidatabase.rollback()
+        raise e 
+    finally : 
+        connection.close()
+
+#TRANSAKSI DETAIL
+
+def get_all_data_transaksi_detail ():
+    connection = koneksidatabase.cursor()
+    try:
+        connection.execute('SELECT id,transaksi_id,barang_id,kuantitas,harga FROM transaksi_detail')
+        result = connection.fetchall()
+        new_data = []
+        for transaksi_detail in result :
+            data_baru = {
+                'id' : transaksi_detail [0],
+                'transaksi_id': transaksi_detail [1],
+                'barang_id': transaksi_detail [2],
+                'kuantitas' : transaksi_detail [3],
+                'harga' : transaksi_detail [4]
+            }
+            new_data.append(data_baru)
+        koneksidatabase.commit()
+    except Exception as e :
+        koneksidatabase.rollback()
+        raise e 
+    finally :
+        koneksidatabase.close()
+    return new_data
+
+def create_transaksi_detail (transaksi_id :int, barang_id : int, kuantitas : int , harga : int):
+    connection = koneksidatabase.cursor()
+    try:
+        connection.execute('INSERT INTO transaksi_detail (transaksi_id,barang_id,kuantitas,harga) VALUES (%s,%s,%s,%s)',(transaksi_id,barang_id,kuantitas,harga))
+        koneksidatabase.commit()
+    except Exception as e :
+        koneksidatabase.rollback()
+        raise e 
+    finally:
+        connection.close()
+
+def pick_id_transaksi_detail (id):
+    connection = koneksidatabase.cursor()
+    try:
+        connection.execute('SELECT id,transaksi_id,barang_id,kuantitas,harga from transaksi_detail where id = %s',(id,))
+        transaksi_detail = connection.fetchone()
+        koneksidatabase.commit()
+    except Exception as e :
+        koneksidatabase.rollback()
+        raise e 
+    finally :
+        connection.close()
+    if transaksi_detail is None:
+        return None
+    return{
+        'id' : transaksi_detail [0],
+        'transaksi_id': transaksi_detail [1],
+        'barang_id': transaksi_detail [2],
+        'kuantitas' : transaksi_detail [3],
+        'harga' : transaksi_detail [4]
+    }
+
+def delete_transaksi_detail (id):
+    connection = koneksidatabase.cursor()
+    try:
+        connection.execute('DELETE from transaksi_detail where id = %s',(id,))
+        koneksidatabase.commit()
+    except Exception as e :
+        koneksidatabase.rollback()
+        raise e 
+    finally :
+        connection.close()
+
+def edit_transaksi_detail (id,transaksi_id :int, barang_id : int, kuantitas : int , harga : int):
+    connection = koneksidatabase.cursor()
+    try:
+        connection.execute('UPDATE transaksi_detail SET transaksi_id =%s, barang_id =%s, kuantitas =%s,  harga = %s WHERE id =%s',(transaksi_id,barang_id,kuantitas,harga,id))
+        koneksidatabase.commit()
+    except Exception as e :
+        koneksidatabase.rollback()
+        raise e 
+    finally : 
+        connection.close()

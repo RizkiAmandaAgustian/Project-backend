@@ -35,3 +35,27 @@ def for_validation_keranjang (user_id, barang_id, kuantitas,):
         error.append('masukkan barang_id')
     if len (error)>0:
         return {'error':error}
+
+def for_validation_transaksi (nama_lengkap, alamat, user_id):
+    error = []
+    if nama_lengkap is None :
+        error.append('masukkan nama_lengkap')
+    if user_id is None :
+        error.append('masukkan user_id')
+    if alamat is None :
+        error.append('masukkan alamat')
+    if len (error)>0:
+        return {'error':error}
+    
+def for_validation_transaksi_detail (transaksi_id, barang_id, kuantitas, harga):
+    error = []
+    if transaksi_id is None :
+        error.append('masukkan transaksi_id')
+    if kuantitas is None :
+        error.append('masukkan kuantitas')
+    if barang_id is None :
+        error.append('masukkan barang_id')
+    if harga is None :
+        error.append('masukkan harga')
+    if len (error)>0:
+        return {'error':error}
