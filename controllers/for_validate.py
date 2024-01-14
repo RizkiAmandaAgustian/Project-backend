@@ -59,3 +59,14 @@ def for_validation_transaksi_detail (transaksi_id, barang_id, kuantitas, harga):
         error.append('masukkan harga')
     if len (error)>0:
         return {'error':error}
+    
+def for_validation_users (username, password,nama_lengkap): #VALIDASI DISINI SESUAI DENGAN YANG INGIN DIGANTI DI DATABASE KALAU YANG INGIN DI EDIT 3 YA ISI 3
+    error = []
+    if username is None :
+        error.append('masukkan username')
+    if password is None :
+        error.append('masukkan password')
+    if nama_lengkap is None :
+        error.append('masukkan nama_lengkap')
+    if len (error)>0:
+        return {'error':error}
