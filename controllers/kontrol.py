@@ -23,20 +23,20 @@ def create_users():
     for_mechanism.create_users(username,password,nama_lengkap)
     return '',200
 
-def ambil_id_users(id):
+def pick_id_users(id):
     get_id = for_mechanism.pick_id_users(id)
     if get_id is None :
         return '', 404
     return for_mechanism.pick_id_users(id)
 
-def hapus_users(id):
+def delete_users(id):
     get_id = for_mechanism.pick_id_users(id)
     if get_id is None:
         return '', 404
     for_mechanism.delete_users(id)
     return '',200
 
-def edit_users(id): 
+def editt_users(id): 
     if for_mechanism.pick_id_users(id) is None:
         return '' , 404
     username = request.form.get('username')
@@ -70,20 +70,20 @@ def create_kategori():
     for_mechanism.create_kategori(label)
     return '',200
 
-def ambil_id_kategori(id):
+def pick_id_kategori(id):
     get_id = for_mechanism.pick_id_kategori(id)
     if get_id is None :
         return '', 404
     return for_mechanism.pick_id_kategori(id)
 
-def hapus_kategori(id):
+def delete_kategori(id):
     get_id = for_mechanism.pick_id_kategori(id)
     if get_id is None:
         return '', 404
     for_mechanism.delete_kategori(id)
     return '',200
 
-def edit_kategori(id): 
+def editt_kategori(id): 
     if for_mechanism.pick_id(id) is None:
         return '' , 404
     label = request.form.get('label')
@@ -96,16 +96,20 @@ def edit_kategori(id):
 #Barang
 
 def get_all_data_barang():
-    items = for_mechanism.get_all_data_barang()
-    if request.args.get('keyword') is not None:
-        keyword = request.args.get('keyword')
+    keyword = request.args.get('keyword')
+    limit = int(request.args.get("limit", 3))
+    page = int(request.args.get("page", 1))
 
-        _items = []
-        for item in items:
-            if keyword in item['label'].lower():
-                _items.append(item)
-        items = _items
+    items = for_mechanism.paginasi(
+        limit=limit,
+        page=page,
+        keyword=keyword
+    )
+    
+
     return items
+    
+
 
 def create_barang():
     nama_barang = request.form.get('nama_barang')
@@ -120,20 +124,20 @@ def create_barang():
     for_mechanism.create_barang(nama_barang,deskripsi,harga,stok,kategori_id)
     return '',200
 
-def ambil_id_barang(id):
+def pick_id_barang(id):
     get_id = for_mechanism.pick_id_barang(id)
     if get_id is None :
-        return '', 404
+        return '', 404      
     return for_mechanism.pick_id_barang(id)
 
-def hapus_barang(id):
+def delete_barang(id):
     get_id = for_mechanism.pick_id_barang(id)
     if get_id is None:
         return '', 404
     for_mechanism.delete_barang(id)
     return '',200
 
-def edit_barang(id): 
+def editt_barang(id): 
     if for_mechanism.pick_id_barang(id) is None:
         return '' , 404
     nama_barang = request.form.get('nama_barang')
@@ -173,20 +177,20 @@ def create_keranjang():
     for_mechanism.create_keranjang(user_id,barang_id,kuantitas,)
     return '',200
 
-def ambil_id_keranjang(id):
+def pick_id_keranjang(id):
     get_id = for_mechanism.pick_id_keranjang(id)
     if get_id is None :
         return '', 404
     return for_mechanism.pick_id_keranjang(id)
 
-def hapus_keranjang(id):
+def delete_keranjang(id):
     get_id = for_mechanism.pick_id_keranjang(id)
     if get_id is None:
         return '', 404
     for_mechanism.delete_keranjang(id)
     return '',200
 
-def edit_keranjang(id): 
+def editt_keranjang(id): 
     if for_mechanism.pick_id_keranjang(id) is None:
         return '' , 404
     user_id = request.form.get('user_id')
@@ -224,20 +228,20 @@ def create_transaksi():
     for_mechanism.create_transaksi(nama_lengkap,alamat,user_id)
     return '',200
 
-def ambil_id_transaksi(id):
+def pick_id_transaksi(id):
     get_id = for_mechanism.pick_id_transaksi(id)
     if get_id is None :
         return '', 404
     return for_mechanism.pick_id_transaksi(id)
 
-def hapus_transaksi(id):
+def delete_transaksi(id):
     get_id = for_mechanism.pick_id_transaksi(id)
     if get_id is None:
         return '', 404
     for_mechanism.delete_transaksi(id)
     return '',200
 
-def edit_transaksi(id): 
+def editt_transaksi(id): 
     if for_mechanism.pick_id_transaksi(id) is None:
         return '' , 404
     nama_lengkap = request.form.get('nama_lengkap')
@@ -276,20 +280,20 @@ def create_transaksi_detail():
     for_mechanism.create_transaksi_detail(transaksi_id,barang_id,kuantitas,harga)
     return '',200
     
-def ambil_id_transaksi_detail(id):
+def pick_id_transaksi_detail(id):
     get_id = for_mechanism.pick_id_transaksi_detail(id)
     if get_id is None :
         return '', 404
     return for_mechanism.pick_id_transaksi_detail(id)
     
-def hapus_transaksi_detail(id):
+def delete_transaksi_detail(id):
     get_id = for_mechanism.pick_id_transaksi_detail(id)
     if get_id is None:
         return '', 404
     for_mechanism.delete_transaksi_detail(id)
     return '',200
     
-def edit_transaksi_detail(id): 
+def editt_transaksi_detail(id): 
     if for_mechanism.pick_id_transaksi_detail(id) is None:
         return '' , 404
     transaksi_id = request.form.get('transaksi_id')
@@ -303,3 +307,11 @@ def edit_transaksi_detail(id):
     for_mechanism.edit_transaksi_detail(id,transaksi_id,barang_id,kuantitas,harga)
     return '', 200
 
+def paginasi ():
+    limit = int(request.args.get("limit", 3))
+    page = int(request.args.get("page", 1))
+
+    return for_mechanism.paginasi(
+        limit=limit,
+        page=page,
+    )

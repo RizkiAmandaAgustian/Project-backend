@@ -75,11 +75,33 @@ def edit_users (id : int,username : str, password : str , nama_lengkap : str):
         connection.close()
 
 #KATEGORI
-
-def get_all_data_kategori ():
+        
+def get_all_data_kategori (page : int, limit : int, keyword: str = None):
     connection = koneksidatabase.cursor()
-    try:
-        connection.execute('SELECT id,label FROM kategori')
+    try: 
+        page = (page - 1 ) * limit
+
+        whereKeyword = ""
+
+        if keyword is not None:
+            whereKeyword = " WHERE nama_barang ilike %(keyword)s "
+
+        query = f"""
+        SELECT id,label 
+        FROM kategori 
+
+        {whereKeyword}
+
+        limit %(limit)s 
+        offset %(offset)s
+
+        """
+        values = {"limit": limit, "offset": page}
+        if keyword is not None:
+            values['keyword'] = '%'+keyword+'%'
+
+        connection.execute(query,values)
+        barangg = connection.fetchall()
         result = connection.fetchall()
         new_data = []
         for kategori in result :
@@ -88,13 +110,14 @@ def get_all_data_kategori ():
                 'label': kategori [1],
             }
             new_data.append(data_baru)
+        
         koneksidatabase.commit()
     except Exception as e :
         koneksidatabase.rollback()
         raise e 
-    finally :
-        koneksidatabase.close()
-    return new_data
+    finally: 
+        connection.close()
+    return barangg
 
 def create_kategori (label :str):
     connection = koneksidatabase.cursor()
@@ -148,32 +171,53 @@ def edit_kategori (id,label : str):
         connection.close()
 
 #BARANG
-        
-def get_all_data_barang ():
-    connection = koneksidatabase.cursor()
-    try:
-        connection.execute('SELECT id,nama_barang,deskripsi,harga,stok,kategori_id FROM barang ')
-        result = connection.fetchall()
-        new_data = []
-        for barang in result :
-            data_baru = {
-                'id' : barang [0],
-                'nama_barang': barang [1],
-                'deskripsi' : barang [2],
-                'harga' : barang [3],
-                'stok' : barang [4],
-                'kategori_id' : [5],
-            }
-            new_data.append(data_baru)
 
+def get_all_data_barang (page : int, limit : int, keyword: str = None):
+    connection = koneksidatabase.cursor()
+    try: 
+        page = (page - 1 ) * limit
+
+        whereKeyword = ""
+
+        if keyword is not None:
+            whereKeyword = " WHERE nama_barang ilike %(keyword)s "
+
+        query = f"""
+        SELECT id,nama_barang,deskripsi,harga,stok,kategori_id 
+        FROM barang 
+
+        {whereKeyword}
+
+        limit %(limit)s 
+        offset %(offset)s
+
+        """
+        values = {"limit": limit, "offset": page}
+        if keyword is not None:
+            values['keyword'] = '%'+keyword+'%'
+
+        connection.execute(query,values)
+        barangg = connection.fetchall()
+        barang_baru = []
+        for barang in barangg :
+            baranggg = {
+                'id' : barang [0],
+                    'nama_barang': barang [1],
+                    'deskripsi' : barang [2],
+                    'harga' : barang [3],
+                    'stok' : barang [4],
+                    'kategori_id' : [5],
+            }
+            barang_baru.append(baranggg)
+        
         koneksidatabase.commit()
     except Exception as e :
         koneksidatabase.rollback()
         raise e 
-    finally :
-        koneksidatabase.close()
-    
-    return new_data
+    finally: 
+        connection.close()
+    return barang_baru
+
 
 def create_barang (nama_barang :str, deskripsi : str , harga :int , stok : int , kategori_id : int):
     connection = koneksidatabase.cursor()
@@ -251,7 +295,7 @@ def get_all_data_keranjang ():
         koneksidatabase.rollback()
         raise e 
     finally :
-        koneksidatabase.close()
+        connection.close()
     return new_data
 
 def create_keranjang (user_id :int, barang_id : int, kuantitas : int):
@@ -329,7 +373,7 @@ def get_all_data_transaksi ():
         koneksidatabase.rollback()
         raise e 
     finally :
-        koneksidatabase.close()
+        connection.close()
     return new_data
 
 def create_transaksi (nama_lengkap :str, alamat : str , user_id :int):
@@ -403,12 +447,12 @@ def get_all_data_transaksi_detail ():
                 'harga' : transaksi_detail [4]
             }
             new_data.append(data_baru)
-        koneksidatabase.commit()
+            koneksidatabase.commit()
     except Exception as e :
         koneksidatabase.rollback()
         raise e 
     finally :
-        koneksidatabase.close()
+        connection.close()
     return new_data
 
 def create_transaksi_detail (transaksi_id :int, barang_id : int, kuantitas : int , harga : int):
@@ -464,3 +508,51 @@ def edit_transaksi_detail (id,transaksi_id :int, barang_id : int, kuantitas : in
         raise e 
     finally : 
         connection.close()
+
+#TES PAGINASI
+
+def paginasi (page : int, limit : int, keyword: str = None):
+    connection = koneksidatabase.cursor()
+    try: 
+        page = (page - 1 ) * limit
+
+        whereKeyword = ""
+
+        if keyword is not None:
+            whereKeyword = " WHERE nama_barang ilike %(keyword)s "
+
+        query = f"""
+        SELECT id,nama_barang,deskripsi,harga,stok,kategori_id 
+        FROM barang 
+
+        {whereKeyword}
+
+        limit %(limit)s 
+        offset %(offset)s
+
+        """
+        values = {"limit": limit, "offset": page}
+        if keyword is not None:
+            values['keyword'] = '%'+keyword+'%'
+
+        connection.execute(query,values)
+        barangg = connection.fetchall()
+        barang_baru = []
+        for barang in barangg :
+            baranggg = {
+                'id' : barang [0],
+                    'nama_barang': barang [1],
+                    'deskripsi' : barang [2],
+                    'harga' : barang [3],
+                    'stok' : barang [4],
+                    'kategori_id' : [5],
+            }
+            barang_baru.append(baranggg)
+        
+        koneksidatabase.commit()
+    except Exception as e :
+        koneksidatabase.rollback()
+        raise e 
+    finally: 
+        connection.close()
+    return barang_baru
