@@ -1,14 +1,12 @@
 import flask
-from controllers import barang,keranjang,transaksi,transaksi_d,kategori,user,kontrol
-# from controllers import  paginasi,user_login,create_users,pick_id_users,editt_users,delete_users,get_all_data_kategori, create_kategori, pick_id_kategori, delete_kategori, editt_kategori , get_all_data_barang, create_barang , pick_id_barang, delete_barang, editt_barang, get_all_data_keranjang, create_keranjang, pick_id_keranjang, editt_keranjang, delete_keranjang, get_all_data_transaksi, create_transaksi, pick_id_transaksi, editt_transaksi, delete_transaksi, get_all_data_transaksi_detail, create_transaksi_detail, pick_id_transaksi_detail, delete_transaksi_detail, editt_transaksi_detail
+from controllers import barang,keranjang,transaksi,transaksi_d,kategori,user,kontrol,gambar
 from flask_jwt_extended import(
     JWTManager,
     jwt_required,
     get_jwt_identity
 )
 from flask_cors import CORS
-import base64
-from models.for_mechanism import upload_gambar
+from models.for_mechanism import get_allAAAAA
 
 app = flask.Flask(__name__)
 jwt = JWTManager(app)
@@ -159,22 +157,29 @@ def edit_transaksi_detail(id):
     return transaksi_d.editt_transaksi_detail (id)
 
 #UPLOAD
-@app.post('/upload/<int:id>')
-def unggah(id):
-    return kontrol.upload_gambar(id)
+@app.post('/upload')
+def unggah():
+    return gambar.upload_gambar()
 
-# @app.post('/uploads/<int:id>')
-# def edit(id):
-#     return kontrol.edit_gambar(id)
+@app.post('/uploads/<int:id>')
+def edit_gambar(id):
+    return gambar.edit_gambar(id)
 
 @app.get('/gambar/<int:id>')
 def ambil_id_gambar(id):
-    return kontrol.get_id_gambar(id)
+    return gambar.get_id_gambar(id)
 
 @app.delete('/gambar/<int:id>')
 def hapus_gambar(id):
-    return kontrol.hapus_gambar(id)
+    return gambar.hapus_gambar(id)
 
+@app.get('/SQLJOIN')
+def JOIN():
+    return get_allAAAAA()
+
+@app.get('/cobasqlsendiri')
+def tes ():
+    return kontrol.sqllljoin() #berhasil
 
 if __name__ == '__main__':
     app.run(debug=True, host='localhost', port=5002, use_reloader = True)
