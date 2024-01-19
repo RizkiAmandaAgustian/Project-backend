@@ -5,7 +5,8 @@ def sqllljoin ():
     if sql is None:
         return None
     return SQL.sqlljoin()
-def sql ():
+
+def sqlQ ():
     sqll = SQL.get_allAAAAA()
     if sqll is None :
         return None

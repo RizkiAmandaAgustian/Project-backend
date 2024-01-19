@@ -1,12 +1,11 @@
 import flask
-from controllers import barang,keranjang,transaksi,transaksi_d,kategori,user,kontrol,gambar
+from controllers import barang,keranjang,transaksi,transaksi_d,kategori,user,sql,gambar
 from flask_jwt_extended import(
     JWTManager,
     jwt_required,
     get_jwt_identity
 )
 from flask_cors import CORS
-from models.for_mechanism import get_allAAAAA
 
 app = flask.Flask(__name__)
 jwt = JWTManager(app)
@@ -64,7 +63,7 @@ def hapus(id):
 
 @app.put('/kategori/<int:id>')
 def edit(id): 
-    return kategori.edit_kategori (id)
+    return kategori.editt_kategori (id)
 
 #barang
 
@@ -175,11 +174,11 @@ def hapus_gambar(id):
 
 @app.get('/SQLJOIN')
 def JOIN():
-    return get_allAAAAA()
+    return sql.sqlQ()
 
 @app.get('/cobasqlsendiri')
 def tes ():
-    return kontrol.sqllljoin() #berhasil
+    return sql.sqllljoin() #berhasil
 
 if __name__ == '__main__':
     app.run(debug=True, host='localhost', port=5002, use_reloader = True)

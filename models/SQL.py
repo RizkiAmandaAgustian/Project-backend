@@ -22,6 +22,7 @@ def get_allAAAAA():
                       "category": category,
                   }
               )
+        koneksidatabase.commit()
     except Exception as e :
         koneksidatabase.rollback() 
         raise e

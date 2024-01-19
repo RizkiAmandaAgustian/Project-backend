@@ -29,7 +29,7 @@ def get_all_data_barang (page : int, limit : int, keyword: str = None):
         barang_baru = []
         for barang in barangg :
             baranggg = {
-                'id' : barang [0],
+                    'id' : barang [0],
                     'nama_barang': barang [1],
                     'deskripsi' : barang [2],
                     'harga' : barang [3],
