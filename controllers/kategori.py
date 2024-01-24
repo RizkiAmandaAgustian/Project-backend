@@ -1,14 +1,16 @@
 from models import KATEGORI
 from flask import request
-from controllers.for_validate import for_validation_kategori
+from for_validate import for_validation_kategori
 
 def get_all_data_kategori():
     limit = int(request.args.get("limit", 5))
     page = int(request.args.get("page", 1))
+    keyword = request.args.get('keyword')
 
     return KATEGORI.get_all_data_kategori(
         limit=limit,
         page=page,
+        keyword=keyword
     )
 
 def create_kategori():
@@ -33,7 +35,7 @@ def delete_kategori(id):
     return '',200
 
 def editt_kategori(id): 
-    if KATEGORI.pick_id(id) is None:
+    if KATEGORI.pick_id_kategori(id) is None:
         return '' , 404
     label = request.form.get('label')
     validated = for_validation_kategori (label)

@@ -1,6 +1,6 @@
 from models import BARANG
 from flask import request
-from controllers.for_validate import for_validation_barang
+from for_validate import for_validation_barang
 
 def get_all_data_barang():
     keyword = request.args.get('keyword')

@@ -1,6 +1,6 @@
 from models import TRANSAKSI
 from flask import request
-from controllers.for_validate import for_validation_transaksi
+from for_validate import for_validation_transaksi
 
 def get_all_data_transaksi():
         limit = int(request.args.get("limit", 5))

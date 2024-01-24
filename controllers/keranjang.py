@@ -1,6 +1,7 @@
 from models import KERANJANG
 from flask import request
-from controllers.for_validate import for_validation_keranjang
+from for_validate import for_validation_keranjang
+from flask_jwt_extended import get_jwt_identity
 
 def get_all_data_keranjang():
         limit = int(request.args.get("limit", 5))
@@ -12,14 +13,15 @@ def get_all_data_keranjang():
     )
 
 def create_keranjang():
-    user_id = request.form.get('user_id')
+    user_id = get_jwt_identity()
     barang_id = request.form.get('barang_id')
     kuantitas = request.form.get('kuantitas')
 
-    validated = for_validation_keranjang (user_id,barang_id,kuantitas,)
+    validated = for_validation_keranjang (barang_id,kuantitas,)
     if validated is not None :
         return validated,404
-    KERANJANG.create_keranjang(user_id,barang_id,kuantitas,)
+    KERANJANG.create_keranjang(user_id,barang_id,kuantitas)
+    print(user_id)
     return '',200
 
 def pick_id_keranjang(id):

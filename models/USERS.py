@@ -1,15 +1,12 @@
 from static.for_connectionDB import koneksidatabase
-def login_users (username,password):
+def login_users (username:str,password:str):
     koneksi = koneksidatabase.cursor()
     try:
-        koneksi.execute('SELECT * from users WHERE username = %s AND password = %s',(username,password))
+        koneksi.execute('SELECT username,password,id from users WHERE username = %s AND password = %s',(username,password))
         masuk = koneksi.fetchone()
         if masuk is None:
             return None
-        return{
-            'username': masuk[0],
-            'password': masuk [1]
-        }
+        return[{'username': masuk[0]},{'password': masuk[1]},{'id': masuk[2]}]
     except Exception as e :
         koneksidatabase.rollback()
         raise e 

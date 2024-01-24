@@ -25,10 +25,9 @@ def get_all_data_kategori (page : int, limit : int, keyword: str = None):
             values['keyword'] = '%'+keyword+'%'
 
         connection.execute(query,values)
-        barangg = connection.fetchall()
-        result = connection.fetchall()
+        kategorii = connection.fetchall()
         new_data = []
-        for kategori in result :
+        for kategori in kategorii :
             data_baru = {
                 'id' : kategori [0],
                 'label': kategori [1],
@@ -41,7 +40,7 @@ def get_all_data_kategori (page : int, limit : int, keyword: str = None):
         raise e 
     finally: 
         connection.close()
-    return barangg
+    return new_data
 
 def create_kategori (label :str):
     connection = koneksidatabase.cursor()

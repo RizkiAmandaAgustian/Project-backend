@@ -1,5 +1,5 @@
 from controllers.barang import *
-from controllers.for_validate import *
+from for_validate import *
 from controllers.gambar import *
 from controllers.kategori import *
 from controllers.keranjang import *

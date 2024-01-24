@@ -25,10 +25,10 @@ def for_validation_barang (nama_barang, deskripsi, harga, stok, kategori_id):
     if len (error)>0:
         return {'error':error}
     
-def for_validation_keranjang (user_id, barang_id, kuantitas,):
+def for_validation_keranjang (barang_id, kuantitas,):
     error = []
-    if user_id is None :
-        error.append('masukkan user_id')
+    # if user_id is None :
+    #     error.append('masukkan user_id')
     if kuantitas is None :
         error.append('masukkan kuantitas')
     if barang_id is None :
@@ -69,4 +69,12 @@ def for_validation_users (username, password,nama_lengkap): #VALIDASI DISINI SES
     if nama_lengkap is None :
         error.append('masukkan nama_lengkap')
     if len (error)>0:
+        return {'error':error}
+    
+def for_validation_users1 (username, password): #VALIDASI DISINI SESUAI DENGAN YANG INGIN DIGANTI DI DATABASE KALAU YANG INGIN DI EDIT 3 YA ISI 3
+    error = []
+    if username is None :
+        error.append('masukkan username')
+    if password is None :
+        error.append('masukkan password')
         return {'error':error}
