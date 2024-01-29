@@ -13,7 +13,8 @@ def get_all_data_keranjang():
     )
 
 def create_keranjang():
-    user_id = get_jwt_identity()
+    user_id = get_jwt_identity()["id"] #membuat kita bisa memasukkan langsung id ke bagian keranjang
+    print(user_id)
     barang_id = request.form.get('barang_id')
     kuantitas = request.form.get('kuantitas')
 

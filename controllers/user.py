@@ -11,14 +11,15 @@ def user_login ():
         login_user = USERS.login_users(username=username,password=password)
         print (login_user)
         if login_user:
-            accses_token = create_access_token(identity={'username':login_user[0]['username'],'password':login_user[1]['password']})
+            accses_token = create_access_token(identity={'username':login_user['username'],'id':login_user['id']})
             return{'Token': accses_token}
         return{'USERNAME ATAU PASSWORD SALAH'},404
 
 def create_users():
-    cek_user = get_jwt_identity()
+    cek_user=get_jwt_identity()
     if cek_user ['username'] != 'Tian':
         return {'message':'ANDA BUKAN TIAN'},401
+    print(cek_user)
     username = request.form.get('username')
     password = request.form.get('password')
     nama_lengkap = request.form.get('nama_lengkap')

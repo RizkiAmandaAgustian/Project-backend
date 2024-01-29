@@ -97,3 +97,13 @@ def edit_transaksi_detail (id,transaksi_id :int, barang_id : int, kuantitas : in
         raise e 
     finally : 
         connection.close()
+
+def coba_transaksi (transaksi_id,barang_id,kuantitas,harga): 
+    connection = koneksidatabase.cursor()
+    try:
+        connection.execute('INSERT INTO transaksi_detail (transaksi_id,barang_id,kuantitas,harga) VALUES (%s,%s,%s,%s)',(transaksi_id,barang_id,kuantitas,harga))
+    except Exception as e :
+        koneksidatabase.rollback()
+        raise e 
+    finally:
+        connection.close()

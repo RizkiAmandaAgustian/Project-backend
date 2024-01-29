@@ -1,4 +1,5 @@
 from static.for_connectionDB import koneksidatabase
+from flask_jwt_extended import get_jwt_identity
 
 def get_all_data_transaksi (page : int, limit : int, keyword: str = None):
     connection = koneksidatabase.cursor()
@@ -96,4 +97,14 @@ def edit_transaksi (id,nama_lengkap :str, alamat : str , user_id :int):
         koneksidatabase.rollback()
         raise e 
     finally : 
+        connection.close()
+
+def coba_transaksi(nama_lengkap,alamat,tanggal_transaksi,user_id):
+    connection = koneksidatabase.cursor()
+    try:
+        connection.execute('INSERT INTO transaksi (nama_lengkap,alamat,tanggal_transaksi,user_id) VALUES (%s,%s,%s,%s)',(nama_lengkap,alamat,tanggal_transaksi,user_id)) 
+        return connection.fetchone()
+    except Exception as e :
+        raise e 
+    finally: 
         connection.close()

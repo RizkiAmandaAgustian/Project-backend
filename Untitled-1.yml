@@ -390,8 +390,6 @@ paths:
            schema:
             type: object
             properties:
-              user_id : 
-                type: integer
               barang_id :
                 type: integer
               kuantitas :
@@ -753,5 +751,32 @@ paths:
         '200':
           description: OK
         '400':
-          description: coba lagi              
+          description: coba lagi
+
+  /cobatransaksi:
+    post:
+      description: coba aja
+      security:
+        - bearertoken: []
+      requestBody:
+        content:
+          multipart/form-data:
+            encoding:
+              cart_ids:
+                explode: true
+            schema:
+              type: object
+              properties:
+                cart_ids:
+                  type: array
+                nama_lengkap:
+                  type: string
+                alamat:
+                  type: string        
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Coba lagi
+                      
                 

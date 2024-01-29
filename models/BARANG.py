@@ -70,7 +70,7 @@ def pick_id_barang (id):
     finally :
         connection.close()
     if barang is None:
-        return ('data tidak ada di database')
+        return 
     return{
         'id': barang [0],
         'nama_barang' : barang [1],

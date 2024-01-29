@@ -8,9 +8,9 @@ from flask_jwt_extended import(
 from flask_cors import CORS
 
 app = flask.Flask(__name__)
+CORS(app)
 jwt = JWTManager(app)
 app.config['JWT_SECRET_KEY'] = 'HALOO'
-CORS(app)
 from flask_swagger_ui import get_swaggerui_blueprint
 
 SWAGGER_URL = '/api/docs'  # URL for exposing Swagger UI (without trailing '/')
@@ -236,6 +236,11 @@ def JOIN():
 @app.get('/cobasqlsendiri')
 def tes ():
     return sql.sqllljoin() #berhasil
+
+@app.post('/coba_transaksi')
+@jwt_required()
+def cobaaja():
+    return transaksi.coba_transaksi()
 
 if __name__ == '__main__':
     app.run(debug=True, host='localhost', port=5002, use_reloader = True)

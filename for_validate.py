@@ -1,3 +1,4 @@
+from models.KATEGORI import pick_id_kategori
 def for_validation_kategori (label):
     error = []
     if label is None :
@@ -20,8 +21,12 @@ def for_validation_barang (nama_barang, deskripsi, harga, stok, kategori_id):
         error.append('masukkan deskripsi')
     if stok is None :
         error.append('masukkan stok')
-    if kategori_id is None :
+    if kategori_id is None or kategori_id == '':
         error.append('masukkan kategori_id')
+    else:
+        if pick_id_kategori(kategori_id) is None:
+            error.append("Kategori tidak ada di database")
+
     if len (error)>0:
         return {'error':error}
     

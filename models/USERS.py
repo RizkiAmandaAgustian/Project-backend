@@ -6,7 +6,7 @@ def login_users (username:str,password:str):
         masuk = koneksi.fetchone()
         if masuk is None:
             return None
-        return[{'username': masuk[0]},{'password': masuk[1]},{'id': masuk[2]}]
+        return{'username': masuk[0],'id': masuk[2]}
     except Exception as e :
         koneksidatabase.rollback()
         raise e 
