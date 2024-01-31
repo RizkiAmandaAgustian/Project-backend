@@ -2,6 +2,9 @@ from static.for_connectionDB import koneksidatabase
 from flask_jwt_extended import get_jwt_identity
 
 def get_all_data_transaksi (page : int, limit : int, keyword: str = None):
+    '''
+    menentukan paginasi dan keyword apabila keryword terisi maka akan melakukan pencarian apabila kosong akan melakukan menampilkan data dengan sistem paginasi yang diatur di controller 
+    '''
     connection = koneksidatabase.cursor()
     try: 
         page = (page - 1 ) * limit
@@ -46,6 +49,9 @@ def get_all_data_transaksi (page : int, limit : int, keyword: str = None):
 
 
 def create_transaksi (nama_lengkap :str, alamat : str , user_id :int):
+    '''
+    memasukkan nama_lengkap,alamat,user_id kedalam tabel transaksi 
+    '''
     connection = koneksidatabase.cursor()
     try:
         connection.execute('INSERT INTO transaksi (nama_lengkap,alamat,user_id) VALUES (%s,%s,%s)',(nama_lengkap,alamat,user_id))
@@ -57,6 +63,9 @@ def create_transaksi (nama_lengkap :str, alamat : str , user_id :int):
         connection.close()
 
 def pick_id_transaksi (id):
+    '''
+    mengambil id transaksi 
+    '''
     connection = koneksidatabase.cursor()
     try:
         connection.execute('SELECT id, nama_lengkap, alamat, tanggal_transaksi, user_id from transaksi where id = %s',(id,))
@@ -78,6 +87,9 @@ def pick_id_transaksi (id):
     }
 
 def delete_transaksi (id):
+    '''
+    menghapus transaksi berdasarkan id 
+    '''
     connection = koneksidatabase.cursor()
     try:
         connection.execute('DELETE from transaksi where id = %s',(id,))
@@ -89,6 +101,9 @@ def delete_transaksi (id):
         connection.close()
 
 def edit_transaksi (id,nama_lengkap :str, alamat : str , user_id :int):
+    '''
+    mengedit transaksi berdasarkan id 
+    '''
     connection = koneksidatabase.cursor()
     try:
         connection.execute('UPDATE transaksi SET nama_lengkap =%s, alamat =%s, user_id =%s WHERE id = %s',(nama_lengkap,alamat,user_id,id))
@@ -99,11 +114,14 @@ def edit_transaksi (id,nama_lengkap :str, alamat : str , user_id :int):
     finally : 
         connection.close()
 
-def coba_transaksi(nama_lengkap,alamat,tanggal_transaksi,user_id):
+def coba_transaksi(nama_lengkap,alamat,user_id):
+    '''
+    memasukkan nama_lengkap,alamat,user_id tanpa commit karena komit dilakukan di controller 
+    '''
     connection = koneksidatabase.cursor()
     try:
-        connection.execute('INSERT INTO transaksi (nama_lengkap,alamat,tanggal_transaksi,user_id) VALUES (%s,%s,%s,%s)',(nama_lengkap,alamat,tanggal_transaksi,user_id)) 
-        return connection.fetchone()
+        connection.execute('INSERT INTO transaksi (nama_lengkap,alamat,user_id) VALUES (%s,%s,%s) RETURNING id',(nama_lengkap,alamat,user_id)) 
+        return connection.fetchone()[0]
     except Exception as e :
         raise e 
     finally: 

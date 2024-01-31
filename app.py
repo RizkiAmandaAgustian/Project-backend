@@ -43,7 +43,6 @@ app.register_blueprint(swaggerui_blueprint)
 @app.post('/users1')
 def login_dulu():
     return user.user_login ()
-print(login_dulu)
 
 @app.get('/validate')
 @jwt_required()
@@ -243,4 +242,4 @@ def cobaaja():
     return transaksi.coba_transaksi()
 
 if __name__ == '__main__':
-    app.run(debug=True, host='localhost', port=5002, use_reloader = True)
+    app.run(debug=True, host='0.0.0.0', port=5002, use_reloader = True)

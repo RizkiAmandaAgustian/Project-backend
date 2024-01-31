@@ -1,6 +1,10 @@
 from static.for_connectionDB import koneksidatabase
 
 def get_all_data_barang (page : int, limit : int, keyword: str = None):
+    '''
+    melakukan eksekusi paginasi secara default dan menambahkan mekanisme search query apabila dibutuhkan dan kemudian mengembalikan data sesuai dengan 
+    yang ada di database 
+    '''
     connection = koneksidatabase.cursor()
     try: 
         page = (page - 1 ) * limit
@@ -48,6 +52,9 @@ def get_all_data_barang (page : int, limit : int, keyword: str = None):
 
 
 def create_barang (nama_barang :str, deskripsi : str , harga :int , stok : int , kategori_id : int):
+    '''
+    membuat koneksi database untuk membuat barang
+    '''
     connection = koneksidatabase.cursor()
     try:
         connection.execute('INSERT INTO barang (nama_barang,deskripsi,harga,stok,kategori_id) VALUES (%s,%s,%s,%s,%s)',(nama_barang,deskripsi,harga,stok,kategori_id))
@@ -59,6 +66,9 @@ def create_barang (nama_barang :str, deskripsi : str , harga :int , stok : int ,
         connection.close()
 
 def pick_id_barang (id):
+    '''
+    mengambil id, nama_barang, deskripsi, harga, stok, kategori_id berdasarkan id yang dinginkan
+    '''
     connection = koneksidatabase.cursor()
     try:
         connection.execute('SELECT id, nama_barang, deskripsi, harga, stok, kategori_id from barang where id = %s',(id,))
@@ -81,6 +91,9 @@ def pick_id_barang (id):
     }
 
 def delete_barang (id):
+    '''
+    menghapus barang dengan memasukkan id yang dinginkan
+    '''
     connection = koneksidatabase.cursor()
     try:
         connection.execute('DELETE from barang where id = %s',(id,))
@@ -92,6 +105,9 @@ def delete_barang (id):
         connection.close()
 
 def edit_barang (id,nama_barang :str, deskripsi : str , harga :int , stok : int , kategori_id : int):
+    '''
+    mengedit dalam tabel barang yang berisi nama_barang, deskripsi, harga, stok, kategori_id dengan memasukkan id yang dibutuhkan
+    '''
     connection = koneksidatabase.cursor()
     try:
         connection.execute('UPDATE barang SET nama_barang =%s, deskripsi =%s, harga =%s, stok =%s, kategori_id =%s WHERE id = %s',(nama_barang,deskripsi,harga,stok,kategori_id,id))

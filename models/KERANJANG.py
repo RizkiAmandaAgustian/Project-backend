@@ -1,6 +1,9 @@
 from static.for_connectionDB import koneksidatabase
 
 def get_all_data_keranjang (page : int, limit : int, keyword: str = None):
+    '''
+    menentukan paginasi dan keyword apabila keryword terisi maka akan melakukan pencarian apabila kosong akan melakukan menampilkan data dengan sistem paginasi yang diatur di controller 
+    '''
     connection = koneksidatabase.cursor()
     try: 
         page = (page - 1 ) * limit
@@ -45,6 +48,9 @@ def get_all_data_keranjang (page : int, limit : int, keyword: str = None):
 
 
 def create_keranjang (user_id :int, barang_id : int, kuantitas : int):
+    '''
+    memasukkan user_id,barang_id,kuantitas ke tabel keranjang 
+    '''
     connection = koneksidatabase.cursor()
     try:
         connection.execute('INSERT INTO keranjang (user_id,barang_id,kuantitas) VALUES (%s,%s,%s)',(user_id,barang_id,kuantitas))
@@ -56,6 +62,9 @@ def create_keranjang (user_id :int, barang_id : int, kuantitas : int):
         connection.close()
 
 def pick_id_keranjang (id):
+    '''
+    mengambil id keranjang 
+    '''
     connection = koneksidatabase.cursor()
     try:
         connection.execute('SELECT id,user_id,barang_id,kuantitas from keranjang where id = %s',(id,))
@@ -76,6 +85,9 @@ def pick_id_keranjang (id):
     }
 
 def delete_keranjang (id):
+    '''
+    menghapus keranjang dengan id yang sama dengan yang dimasukkan 
+    '''
     connection = koneksidatabase.cursor()
     try:
         connection.execute('DELETE from keranjang where id = %s',(id,))
@@ -87,6 +99,9 @@ def delete_keranjang (id):
         connection.close()
 
 def edit_keranjang (id,user_id:int,barang_id:int,kuantitas:int):
+    '''
+    menghapus keranjang dengan id yang sama dengan yang dimasukkan 
+    '''
     connection = koneksidatabase.cursor()
     try:
         connection.execute('UPDATE keranjang SET user_id =%s, barang_id =%s, kuantitas =%s  WHERE id = %s',(user_id,barang_id,kuantitas,id))

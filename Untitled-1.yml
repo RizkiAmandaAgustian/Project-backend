@@ -4,7 +4,7 @@ info:
   version: '1.0'
   description: PROJECT TOKO LAPTOP
 servers:
-  - url: http://localhost:5002
+  - url: http://127.0.0.1:5002
 components:
   securitySchemes:
     bearertoken:
@@ -762,13 +762,15 @@ paths:
         content:
           multipart/form-data:
             encoding:
-              cart_ids:
+              id_keranjang:
                 explode: true
             schema:
               type: object
               properties:
-                cart_ids:
+                id_keranjang:
                   type: array
+                  items:
+                    type: integer
                 nama_lengkap:
                   type: string
                 alamat:

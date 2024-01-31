@@ -5,6 +5,9 @@ from flask_jwt_extended import get_jwt_identity
 from static.for_connectionDB import koneksidatabase
 
 def get_all_data_transaksi():
+        '''
+        get_all_data_barang mengambil semua data berdasarkan sistem paginasi dengan default 3 data dalam 1 halaman dan menggunakan keyword apabila ingin digunakan 
+        '''
         limit = int(request.args.get("limit", 5))
         page = int(request.args.get("page", 1))
 
@@ -13,6 +16,9 @@ def get_all_data_transaksi():
         page=page,
     )
 def create_transaksi():
+    '''
+    membuat transaksi dengan memasukkan nama_lengkap, alamat dan user id
+    '''
     nama_lengkap = request.form.get('nama_lengkap')
     alamat = request.form.get('alamat')
     user_id = request.form.get('user_id')
@@ -24,12 +30,18 @@ def create_transaksi():
     return '',200
 
 def pick_id_transaksi(id):
+    '''
+    mengambil id transaksi 
+    '''
     get_id = TRANSAKSI.pick_id_transaksi(id)
     if get_id is None :
         return '', 404
     return TRANSAKSI.pick_id_transaksi(id)
 
 def delete_transaksi(id):
+    '''
+    mengapus transaksi berdasarkan dengan pengecekan id transaksi terlebih dahulu 
+    '''
     get_id = TRANSAKSI.pick_id_transaksi(id)
     if get_id is None:
         return '', 404
@@ -37,6 +49,9 @@ def delete_transaksi(id):
     return '',200
 
 def editt_transaksi(id): 
+    '''
+    mengedit transaksi berdasarkan dengan pengecekan id transaksi terlebih dahulu 
+    '''
     if TRANSAKSI.pick_id_transaksi(id) is None:
         return '' , 404
     nama_lengkap = request.form.get('nama_lengkap')
@@ -50,20 +65,25 @@ def editt_transaksi(id):
     return '', 200
 
 def coba_transaksi():
+    '''
+    melakukan transaksi dan transaksi detail dalam 1 langkah eksekusi 
+    memasukkan user id by token dan manual input nama_lengkap,alamat,cart_ids
+    dan melakukan transaksi dan melakukan pengulangan dan melakukan transaksi detail 
+    '''
     Connection = koneksidatabase.cursor()
     try:
         user_id = get_jwt_identity ()['id']
         nama_lengkap = request.form.get('nama_lengkap')
         alamat = request.form.get('alamat')
         cart_ids = request.form.getlist('id_keranjang')
-        transaksi = TRANSAKSI.coba_transaksi(user_id,alamat,nama_lengkap)
+        transaksi = TRANSAKSI.coba_transaksi(nama_lengkap,alamat,user_id)
         for cart_id in cart_ids :
-            cart = KERANJANG.pick_id_keranjang(cart_id,user_id)
+            cart = KERANJANG.pick_id_keranjang(cart_id)
             if cart is None:
                 return 'eror data tidak ada di database'
             produk = BARANG.pick_id_barang(cart['id'])
             total = cart['barang_id'] * cart ['kuantitas']
-            TRANSAKSI_D.coba_transaksi(transaksi['id'],produk['id'],cart['kuantitas'],cart ['barang_id'],total)
+            TRANSAKSI_D.coba_transaksi(transaksi,produk['id'],cart['kuantitas'],total)
         #coba dulu tanpa menghapus keranjang
         koneksidatabase.commit()
         return{'message':'Berhasil ditambahkan'}

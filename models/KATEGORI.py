@@ -1,6 +1,9 @@
 from static.for_connectionDB import koneksidatabase
 
 def get_all_data_kategori (page : int, limit : int, keyword: str = None):
+    '''
+    menentukan paginasi dan keyword apabila keryword terisi maka akan melakukan pencarian apabila kosong akan melakukan menampilkan data dengan sistem paginasi yang diatur di controller 
+    '''
     connection = koneksidatabase.cursor()
     try: 
         page = (page - 1 ) * limit
@@ -43,6 +46,9 @@ def get_all_data_kategori (page : int, limit : int, keyword: str = None):
     return new_data
 
 def create_kategori (label :str):
+    '''
+    membuat eksekusi untuk memasukkan label kedalam tabel kategori
+    '''
     connection = koneksidatabase.cursor()
     try:
         connection.execute('INSERT INTO kategori (label) VALUES (%s)',(label,))
@@ -54,6 +60,9 @@ def create_kategori (label :str):
         connection.close()
 
 def pick_id_kategori (id):
+    '''
+    mengambil kategori id
+    '''
     connection = koneksidatabase.cursor()
     try:
         connection.execute('SELECT id,label from kategori where id = %s',(id,))
@@ -72,6 +81,9 @@ def pick_id_kategori (id):
     }
 
 def delete_kategori (id):
+    '''
+    menghapus kategori dengan memasukkan id yang ada 
+    '''
     connection = koneksidatabase.cursor()
     try:
         connection.execute('DELETE from kategori where id = %s',(id,))
@@ -83,6 +95,9 @@ def delete_kategori (id):
         connection.close()
 
 def edit_kategori (id,label : str):
+    '''
+    mengedit kategori dengan memasukkan id 
+    '''
     connection = koneksidatabase.cursor()
     try:
         connection.execute('UPDATE kategori SET label =%s WHERE id = %s',(label,id))

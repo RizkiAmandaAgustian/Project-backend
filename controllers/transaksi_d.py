@@ -3,6 +3,9 @@ from flask import request
 from for_validate import for_validation_transaksi_detail
 
 def get_all_data_transaksi_detail():
+    '''
+    get_all_data_barang mengambil semua data berdasarkan sistem paginasi dengan default 3 data dalam 1 halaman dan menggunakan keyword apabila ingin digunakan 
+    '''
     limit = int(request.args.get("limit", 5))
     page = int(request.args.get("page", 1))
 
