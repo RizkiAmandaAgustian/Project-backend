@@ -121,7 +121,7 @@ def coba_transaksi(nama_lengkap,alamat,user_id):
     connection = koneksidatabase.cursor()
     try:
         connection.execute('INSERT INTO transaksi (nama_lengkap,alamat,user_id) VALUES (%s,%s,%s) RETURNING id',(nama_lengkap,alamat,user_id)) 
-        return connection.fetchone()[0]
+        return connection.fetchone()[0] #berpengaruh pada data yang akan kita ambil di bagian returning
     except Exception as e :
         raise e 
     finally: 

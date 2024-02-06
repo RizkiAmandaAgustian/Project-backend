@@ -78,11 +78,11 @@ def coba_transaksi():
         cart_ids = request.form.getlist('id_keranjang')
         transaksi = TRANSAKSI.coba_transaksi(nama_lengkap,alamat,user_id)
         for cart_id in cart_ids :
-            cart = KERANJANG.pick_id_keranjang(cart_id)
+            cart = KERANJANG.coba_pick_id_keranjang(cart_id)
             if cart is None:
                 return 'eror data tidak ada di database'
             produk = BARANG.pick_id_barang(cart['id'])
-            total = cart['barang_id'] * cart ['kuantitas']
+            total = cart['harga'] * cart ['kuantitas']
             TRANSAKSI_D.coba_transaksi(transaksi,produk['id'],cart['kuantitas'],total)
         #coba dulu tanpa menghapus keranjang
         koneksidatabase.commit()

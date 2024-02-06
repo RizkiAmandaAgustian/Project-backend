@@ -111,3 +111,27 @@ def edit_keranjang (id,user_id:int,barang_id:int,kuantitas:int):
         raise e 
     finally : 
         connection.close()
+
+def coba_pick_id_keranjang (id):
+    '''
+    mengambil id keranjang 
+    '''
+    connection = koneksidatabase.cursor()
+    try:
+        connection.execute('select k.id, user_id, barang_id, kuantitas, b.harga from keranjang k join barang b on b.id = k.barang_id where k.id= %s',(id,))
+        laptop = connection.fetchone()
+        koneksidatabase.commit()
+    except Exception as e :
+        koneksidatabase.rollback()
+        raise e 
+    finally :
+        connection.close()
+    if laptop is None:
+        return None
+    return{
+        'id': laptop [0],
+        'user_id' : laptop [1],
+        'barang_id' : laptop [2],
+        'kuantitas' : laptop [3],
+        'harga': int(laptop[4])
+    }

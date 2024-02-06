@@ -753,7 +753,7 @@ paths:
         '400':
           description: coba lagi
 
-  /cobatransaksi:
+  /coba_transaksi:
     post:
       description: coba aja
       security:

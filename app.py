@@ -1,3 +1,5 @@
+from dotenv import load_dotenv
+load_dotenv ()
 import flask
 from controllers import barang,keranjang,transaksi,transaksi_d,kategori,user,sql,gambar
 from flask_jwt_extended import(
@@ -62,7 +64,17 @@ def get_id_users(id):
 @app.put('/users/<int:id>')
 @jwt_required()
 def put_users(id):
+    cek_user=get_jwt_identity()
+    if cek_user ['username'] != 'Tian':
+        return {'message':'ANDA BUKAN TIAN'},401
     return user.editt_users(id)
+
+@app.put('/me')
+@jwt_required()
+def put_current_users():
+    id=get_jwt_identity()['id']
+    return user.editt_users(id)
+
 
 @app.delete('/users/<int:id>')
 @jwt_required()
