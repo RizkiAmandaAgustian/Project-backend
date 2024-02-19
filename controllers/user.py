@@ -28,10 +28,6 @@ def create_users():
     setelah mengisi dan tidak ada yang kosong maka akan dilanjutkan ke models.USERS.create_users untuk disambungkan ke database agar username dan password 
     bisa disimpan disana 
     '''
-    cek_user=get_jwt_identity()
-    if cek_user ['username'] != 'Tian':
-        return {'message':'ANDA BUKAN TIAN'},401
-    print(cek_user)
     username = request.form.get('username')
     password = request.form.get('password')
     nama_lengkap = request.form.get('nama_lengkap')
@@ -55,9 +51,6 @@ def delete_users(id):
     delete_users untuk menghapus suatu data di database dengan menambahkan id pada route pemanggilan data
     sebelum menghapus data dilakukan pengecekan terlebih dahulu dengan USERS.pick_id_users apabila ada data yang dimaksud lantas bisa kita hapus
     '''
-    cek_user=get_jwt_identity()
-    if cek_user ['username'] != 'Tian':
-        return {'message':'ANDA BUKAN TIAN'},401
     get_id = USERS.pick_id_users(id)
     if get_id is None:
         return '', 404

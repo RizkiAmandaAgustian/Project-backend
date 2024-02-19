@@ -42,11 +42,11 @@ app.register_blueprint(swaggerui_blueprint)
 #     return kontrol.paginasi()
 
 #USERS
-@app.post('/users1')
+@app.post('/users/login')
 def login_dulu():
     return user.user_login ()
 
-@app.get('/validate')
+@app.get('/validate_login')
 @jwt_required()
 def validation ():
     users = get_jwt_identity()
@@ -61,24 +61,17 @@ def buat_users():
 def get_id_users(id):
     return user.pick_id_users(id)
 
-@app.put('/users/<int:id>')
-@jwt_required()
-def put_users(id):
-    cek_user=get_jwt_identity()
-    if cek_user ['username'] != 'Tian':
-        return {'message':'ANDA BUKAN TIAN'},401
-    return user.editt_users(id)
-
-@app.put('/me')
+@app.put('/users')
 @jwt_required()
 def put_current_users():
     id=get_jwt_identity()['id']
     return user.editt_users(id)
 
 
-@app.delete('/users/<int:id>')
+@app.delete('/users')
 @jwt_required()
-def hapus_users(id):
+def hapus_users():
+    id=get_jwt_identity()['id']
     return user.delete_users(id)
 
 #KATEGORI
@@ -174,8 +167,8 @@ def ambil_all_transaksi():
 
 @app.post('/transaksi')
 @jwt_required()
-def buat_transaksi():
-    return transaksi.create_transaksi ()
+def cobaaja():
+    return transaksi.coba_transaksi()
 
 @app.get('/transaksi/<int:id>')
 @jwt_required()
@@ -248,10 +241,6 @@ def JOIN():
 def tes ():
     return sql.sqllljoin() #berhasil
 
-@app.post('/coba_transaksi')
-@jwt_required()
-def cobaaja():
-    return transaksi.coba_transaksi()
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=5002, use_reloader = True)

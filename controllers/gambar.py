@@ -1,8 +1,12 @@
 from flask import request
 import os, time
 from models import GAMBAR
+from flask_jwt_extended import get_jwt_identity
 
 def upload_gambar():
+    cek_user=get_jwt_identity()
+    if cek_user ['username'] != 'Tian':
+        return {'message':'ANDA BUKAN TIAN'},401
     if "file" not in request.files:
         return "No file part"
 
@@ -29,6 +33,9 @@ def upload_gambar():
     return '',200
 
 def edit_gambar(id):
+    cek_user=get_jwt_identity()
+    if cek_user ['username'] != 'Tian':
+        return {'message':'ANDA BUKAN TIAN'},401
     if "file" not in request.files:
         return "No file part"
 
@@ -55,6 +62,9 @@ def get_id_gambar(id):
     return GAMBAR.pick_id_gambar(id)
 
 def hapus_gambar(id):
+    cek_user=get_jwt_identity()
+    if cek_user ['username'] != 'Tian':
+        return {'message':'ANDA BUKAN TIAN'},401
     hapus = GAMBAR.pick_id_gambar(id)
     if hapus is None :
         return None

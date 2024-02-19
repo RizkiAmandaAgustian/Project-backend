@@ -18,7 +18,7 @@ paths:
       responses:
         '200':
           description: OK
-  /users1:
+  /users/login:
     post:
       tags:
         - users
@@ -41,7 +41,7 @@ paths:
           description: Bad request
         '404':
           description: NOT FOUND
-  /validated:
+  /validated_login:
     get:
       tags:
         - users
@@ -76,34 +76,11 @@ paths:
           description: OK
         '401':
           description: Unauthorized
-  /users/{id}:
-    get:
-      tags:
-        - users
-      security:
-        - bearertoken: []
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: integer
-      responses:
-        '200':
-          description: sukses
-        '400':
-          description: gagal
     put:
       tags:
         - users
       security:
         - bearertoken: []
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: integer
       requestBody:
         content:
           multipart/form-data:
@@ -121,11 +98,21 @@ paths:
           description: sukses
         '400':
           description: coba lagi
-
     delete:
       tags:
         - users
       description: hapus users
+      security:
+        - bearertoken: []
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: coba lagi
+  /users/{id}:
+    get:
+      tags:
+        - users
       security:
         - bearertoken: []
       parameters:
@@ -136,9 +123,9 @@ paths:
             type: integer
       responses:
         '200':
-          description: OK
+          description: sukses
         '400':
-          description: coba lagi
+          description: gagal
   
   /kategori:
     get:
@@ -533,26 +520,31 @@ paths:
     post:
       tags:
         - transaksi
-      description: untuk membuat data transaksi
+      description: Create transaksi 
       security:
         - bearertoken: []
       requestBody:
         content:
           multipart/form-data:
+            encoding:
+              id_keranjang:
+                explode: true
             schema:
               type: object
               properties:
+                id_keranjang:
+                  type: array
+                  items:
+                    type: integer
                 nama_lengkap:
                   type: string
                 alamat:
-                  type: string
-                user_id:
-                  type: string
+                  type: string        
       responses:
         '200':
           description: OK
         '400':
-          description: coba lagi 
+          description: Coba lagi 
   
   /transaksi/{id}:
     get:
@@ -822,35 +814,6 @@ paths:
           description: OK
         '400':
           description: coba lagi
-
-  /coba_transaksi:
-    post:
-      tags:
-        - transaksi
-      description: coba aja
-      security:
-        - bearertoken: []
-      requestBody:
-        content:
-          multipart/form-data:
-            encoding:
-              id_keranjang:
-                explode: true
-            schema:
-              type: object
-              properties:
-                id_keranjang:
-                  type: array
-                  items:
-                    type: integer
-                nama_lengkap:
-                  type: string
-                alamat:
-                  type: string        
-      responses:
-        '200':
-          description: OK
-        '400':
-          description: Coba lagi
+    
                       
                 
