@@ -84,3 +84,8 @@ def editt_barang(id):
         return validated,404
     BARANG.edit_barang(id,nama_barang,deskripsi,harga,stok,kategori_id)
     return '', 200
+
+def update_stok(id):
+    stok = request.form.get('stok')
+    BARANG.update_stok(stok,id)
+    return '', 200

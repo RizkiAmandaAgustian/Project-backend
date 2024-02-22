@@ -2,6 +2,7 @@ from dotenv import load_dotenv
 load_dotenv ()
 import flask
 from controllers import barang,keranjang,transaksi,transaksi_d,kategori,user,sql,gambar
+from flask_bcrypt import Bcrypt
 from flask_jwt_extended import(
     JWTManager,
     jwt_required,
@@ -11,6 +12,7 @@ from flask_cors import CORS
 
 app = flask.Flask(__name__)
 CORS(app)
+bcrypt = Bcrypt(app)
 jwt = JWTManager(app)
 app.config['JWT_SECRET_KEY'] = 'HALOO'
 from flask_swagger_ui import get_swaggerui_blueprint
@@ -53,7 +55,6 @@ def validation ():
     return{'Kamu berhasil login sebagai':users},200
 
 @app.post('/users')
-@jwt_required()
 def buat_users():
     return user.create_users()
 
@@ -128,6 +129,11 @@ def hapus_barang(id):
 @jwt_required()
 def edit_barangg(id): 
     return barang.editt_barang (id)
+
+@app.post('/barang/<int:id>/stok')
+@jwt_required()
+def stok (id):
+    return barang.update_stok(id)
 
 #KERANJANG
 

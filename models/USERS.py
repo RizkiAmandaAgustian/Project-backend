@@ -1,5 +1,5 @@
 from static.for_connectionDB import koneksidatabase
-def login_users (username:str,password:str):
+def login_users (username:str):
     '''
     login_users untuk mengambil data username dan password yang berada di database
     dan di return username(0) dan id (2) untuk menambil data sesuai dengan urutan eksekusi kode sql dalam kode koneksi.execute yaitu 
@@ -7,11 +7,11 @@ def login_users (username:str,password:str):
     '''
     koneksi = koneksidatabase.cursor()
     try:
-        koneksi.execute('SELECT username,password,id from users WHERE username = %s AND password = %s',(username,password))
+        koneksi.execute('SELECT username,password,id from users WHERE username = %s ',(username,))
         masuk = koneksi.fetchone()
         if masuk is None:
             return None
-        return{'username': masuk[0],'id': masuk[2]}
+        return{'username': masuk[0],'password':masuk[1],'id': masuk[2]}
     except Exception as e :
         koneksidatabase.rollback()
         raise e 

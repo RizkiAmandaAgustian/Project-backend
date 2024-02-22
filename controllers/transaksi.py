@@ -76,14 +76,26 @@ def coba_transaksi():
         nama_lengkap = request.form.get('nama_lengkap')
         alamat = request.form.get('alamat')
         cart_ids = request.form.getlist('id_keranjang')
-        transaksi = TRANSAKSI.coba_transaksi(nama_lengkap,alamat,user_id)
         for cart_id in cart_ids :
             cart = KERANJANG.coba_pick_id_keranjang(cart_id)
             if cart is None:
-                return 'eror data tidak ada di database'
-            produk = BARANG.pick_id_barang(cart['id'])
+                return 'eror data tidak ada di dalam keranjang'
+            
+            stok_keranjang = int(cart ['kuantitas'])
+            produk = BARANG.pick_id_barang(cart['barang_id'])
+            test = cart ['barang_id']
+
+            if int(produk['stok']) < (stok_keranjang) :
+                return f"stok dari barang dalam keranjang dengan nomor  {produk['id']} tidak mencukupi"
+            
             total = cart['harga'] * cart ['kuantitas']
-            TRANSAKSI_D.coba_transaksi(transaksi,produk['id'],cart['kuantitas'],total)
+
+            transaksi = TRANSAKSI.coba_transaksi(nama_lengkap,alamat,user_id)
+            TRANSAKSI_D.coba_transaksi(transaksi,test,cart['kuantitas'],total)
+            
+            update_kuantitas_barang = produk['stok'] - stok_keranjang
+            print(update_kuantitas_barang)
+            BARANG.update_kuantitas(update_kuantitas_barang,produk['id'])
         #coba dulu tanpa menghapus keranjang
         koneksidatabase.commit()
         return{'message':'Berhasil ditambahkan'}

@@ -117,3 +117,22 @@ def edit_barang (id,nama_barang :str, deskripsi : str , harga :int , stok : int 
         raise e 
     finally : 
         connection.close()
+
+def update_stok (stok : str , id : str):
+    connection = koneksidatabase.cursor()
+    try:
+        connection.execute('UPDATE barang SET stok = stok + %s where id = %s',(stok,id))
+        koneksidatabase.commit()
+    except Exception as e :
+        raise e 
+    finally: 
+        connection.close()
+
+def update_kuantitas (stok : int, id : int):
+    connection = koneksidatabase.cursor()
+    try : 
+        connection.execute('UPDATE barang SET stok = %s where id = %s',(stok,id))
+    except Exception as e :
+        raise e 
+    finally:
+        connection.close()

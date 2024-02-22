@@ -57,8 +57,6 @@ paths:
       tags:
         - users
       description: 'tes' 
-      security:
-        - bearertoken: []
       requestBody:
         content:
           multipart/form-data:
@@ -375,6 +373,29 @@ paths:
           description: OK
         '400':
           description: Coba lagi
+  /stok:
+    post:
+      tags:
+        - barang
+      description: untuk menambahkan stok barang
+      security:
+        - bearertoken: []
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                stok:
+                  type: integer
+                id:
+                  type: integer
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: COba lagi 
+      
 
   /keranjang:
     get:
