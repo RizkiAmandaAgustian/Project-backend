@@ -7,7 +7,7 @@
   },
   "servers": [
     {
-      "url": "http://localhost:5002"
+      "url": "http://127.0.0.1:5002"
     }
   ],
   "components": {
@@ -29,8 +29,11 @@
         }
       }
     },
-    "/users1": {
+    "/users/login": {
       "post": {
+        "tags": [
+          "users"
+        ],
         "summary": "Login",
         "operationId": "login",
         "requestBody": {
@@ -63,8 +66,11 @@
         }
       }
     },
-    "/validated": {
+    "/validated_login": {
       "get": {
+        "tags": [
+          "users"
+        ],
         "summary": "protected",
         "operationId": "protected",
         "security": [
@@ -81,6 +87,9 @@
     },
     "/users": {
       "post": {
+        "tags": [
+          "users"
+        ],
         "description": "tes",
         "requestBody": {
           "content": {
@@ -110,38 +119,14 @@
             "description": "Unauthorized"
           }
         }
-      }
-    },
-    "/users/{id}": {
-      "get": {
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "sukses"
-          },
-          "400": {
-            "description": "gagal"
-          }
-        }
       },
       "put": {
-        "parameters": [
+        "tags": [
+          "users"
+        ],
+        "security": [
           {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer"
-            }
+            "bearertoken": []
           }
         ],
         "requestBody": {
@@ -174,15 +159,13 @@
         }
       },
       "delete": {
+        "tags": [
+          "users"
+        ],
         "description": "hapus users",
-        "parameters": [
+        "security": [
           {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer"
-            }
+            "bearertoken": []
           }
         ],
         "responses": {
@@ -195,8 +178,41 @@
         }
       }
     },
+    "/users/{id}": {
+      "get": {
+        "tags": [
+          "users"
+        ],
+        "security": [
+          {
+            "bearertoken": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "sukses"
+          },
+          "400": {
+            "description": "gagal"
+          }
+        }
+      }
+    },
     "/kategori": {
       "get": {
+        "tags": [
+          "kategori"
+        ],
         "description": "mendapatkan semua kategori",
         "security": [
           {
@@ -242,7 +258,15 @@
         }
       },
       "post": {
+        "tags": [
+          "kategori"
+        ],
         "description": "membuat sebuah kategori",
+        "security": [
+          {
+            "bearertoken": []
+          }
+        ],
         "requestBody": {
           "content": {
             "multipart/form-data": {
@@ -269,7 +293,15 @@
     },
     "/kategori/{id}": {
       "get": {
+        "tags": [
+          "kategori"
+        ],
         "description": "mencari kategori by id",
+        "security": [
+          {
+            "bearertoken": []
+          }
+        ],
         "parameters": [
           {
             "name": "id",
@@ -290,7 +322,15 @@
         }
       },
       "delete": {
+        "tags": [
+          "kategori"
+        ],
         "description": "menghapus kategori by id",
+        "security": [
+          {
+            "bearertoken": []
+          }
+        ],
         "parameters": [
           {
             "name": "id",
@@ -311,7 +351,15 @@
         }
       },
       "put": {
+        "tags": [
+          "kategori"
+        ],
         "description": "mengedit kategori by id",
+        "security": [
+          {
+            "bearertoken": []
+          }
+        ],
         "parameters": [
           {
             "name": "id",
@@ -348,7 +396,15 @@
     },
     "/barang": {
       "get": {
+        "tags": [
+          "barang"
+        ],
         "description": "Untuk mendapatkan semua jenis data barang",
+        "security": [
+          {
+            "bearertoken": []
+          }
+        ],
         "parameters": [
           {
             "name": "keyword",
@@ -388,7 +444,15 @@
         }
       },
       "post": {
+        "tags": [
+          "barang"
+        ],
         "description": "membuat barang",
+        "security": [
+          {
+            "bearertoken": []
+          }
+        ],
         "requestBody": {
           "content": {
             "multipart/form-data": {
@@ -427,7 +491,15 @@
     },
     "/barang/{id}": {
       "get": {
+        "tags": [
+          "barang"
+        ],
         "description": "mencari barang berdasarkan id yang ada",
+        "security": [
+          {
+            "bearertoken": []
+          }
+        ],
         "parameters": [
           {
             "name": "id",
@@ -448,7 +520,15 @@
         }
       },
       "put": {
+        "tags": [
+          "barang"
+        ],
         "description": "mengedit barang dengan memasukkan id yang ada",
+        "security": [
+          {
+            "bearertoken": []
+          }
+        ],
         "parameters": [
           {
             "name": "id",
@@ -495,7 +575,15 @@
         }
       },
       "delete": {
+        "tags": [
+          "barang"
+        ],
         "description": "menghapus barang dengan memasukkan id yang diperlukan",
+        "security": [
+          {
+            "bearertoken": []
+          }
+        ],
         "parameters": [
           {
             "name": "id",
@@ -516,9 +604,55 @@
         }
       }
     },
+    "/stok": {
+      "post": {
+        "tags": [
+          "barang"
+        ],
+        "description": "untuk menambahkan stok barang",
+        "security": [
+          {
+            "bearertoken": []
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "stok": {
+                    "type": "integer"
+                  },
+                  "id": {
+                    "type": "integer"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "COba lagi"
+          }
+        }
+      }
+    },
     "/keranjang": {
       "get": {
+        "tags": [
+          "keranjang"
+        ],
         "description": "Untuk mendapatkan data dari keranjang",
+        "security": [
+          {
+            "bearertoken": []
+          }
+        ],
         "parameters": [
           {
             "name": "limit",
@@ -547,16 +681,21 @@
         }
       },
       "post": {
+        "tags": [
+          "keranjang"
+        ],
         "description": "untuk menambahkan keranjang",
+        "security": [
+          {
+            "bearertoken": []
+          }
+        ],
         "requestBody": {
           "content": {
             "multipart/form-data": {
               "schema": {
                 "type": "object",
                 "properties": {
-                  "user_id": {
-                    "type": "integer"
-                  },
                   "barang_id": {
                     "type": "integer"
                   },
@@ -580,7 +719,15 @@
     },
     "/keranjang/{id}": {
       "get": {
+        "tags": [
+          "keranjang"
+        ],
         "description": "mendapatkan data keranjang dengan memasukkan id",
+        "security": [
+          {
+            "bearertoken": []
+          }
+        ],
         "parameters": [
           {
             "name": "id",
@@ -601,7 +748,15 @@
         }
       },
       "put": {
+        "tags": [
+          "keranjang"
+        ],
         "description": "mengedit data keranjang dengan memasukkan data by id",
+        "security": [
+          {
+            "bearertoken": []
+          }
+        ],
         "parameters": [
           {
             "name": "id",
@@ -642,7 +797,15 @@
         }
       },
       "delete": {
+        "tags": [
+          "keranjang"
+        ],
         "description": "Menghapus data di keranjang dengan memasukkan id terlebih dahulu",
+        "security": [
+          {
+            "bearertoken": []
+          }
+        ],
         "parameters": [
           {
             "name": "id",
@@ -665,7 +828,15 @@
     },
     "/transaksi": {
       "get": {
+        "tags": [
+          "transaksi"
+        ],
         "description": "untuk mendapatkan semua data yang ada di transaksi",
+        "security": [
+          {
+            "bearertoken": []
+          }
+        ],
         "parameters": [
           {
             "name": "limit",
@@ -696,20 +867,36 @@
         }
       },
       "post": {
-        "description": "untuk membuat data transaksi",
+        "tags": [
+          "transaksi"
+        ],
+        "description": "Create transaksi",
+        "security": [
+          {
+            "bearertoken": []
+          }
+        ],
         "requestBody": {
           "content": {
             "multipart/form-data": {
+              "encoding": {
+                "id_keranjang": {
+                  "explode": true
+                }
+              },
               "schema": {
                 "type": "object",
                 "properties": {
+                  "id_keranjang": {
+                    "type": "array",
+                    "items": {
+                      "type": "integer"
+                    }
+                  },
                   "nama_lengkap": {
                     "type": "string"
                   },
                   "alamat": {
-                    "type": "string"
-                  },
-                  "user_id": {
                     "type": "string"
                   }
                 }
@@ -722,14 +909,22 @@
             "description": "OK"
           },
           "400": {
-            "description": "coba lagi"
+            "description": "Coba lagi"
           }
         }
       }
     },
     "/transaksi/{id}": {
       "get": {
+        "tags": [
+          "transaksi"
+        ],
         "description": "untuk mendapatkan data transaksi by id",
+        "security": [
+          {
+            "bearertoken": []
+          }
+        ],
         "parameters": [
           {
             "name": "id",
@@ -750,7 +945,15 @@
         }
       },
       "put": {
+        "tags": [
+          "transaksi"
+        ],
         "description": "mengedit data transaksi menggunakan id",
+        "security": [
+          {
+            "bearertoken": []
+          }
+        ],
         "parameters": [
           {
             "name": "id",
@@ -791,7 +994,15 @@
         }
       },
       "delete": {
+        "tags": [
+          "transaksi"
+        ],
         "description": "menghapus data di transaksi menggunakan id",
+        "security": [
+          {
+            "bearertoken": []
+          }
+        ],
         "parameters": [
           {
             "name": "id",
@@ -814,7 +1025,15 @@
     },
     "/transaksi_detail": {
       "get": {
+        "tags": [
+          "transaksi_detail"
+        ],
         "description": "untuk mendapatkan semua data transaksi detail",
+        "security": [
+          {
+            "bearertoken": []
+          }
+        ],
         "parameters": [
           {
             "name": "limit",
@@ -845,7 +1064,15 @@
         }
       },
       "post": {
+        "tags": [
+          "transaksi_detail"
+        ],
         "description": "untuk menambah data transaksi detail",
+        "security": [
+          {
+            "bearertoken": []
+          }
+        ],
         "requestBody": {
           "content": {
             "multipart/form-data": {
@@ -881,7 +1108,15 @@
     },
     "/transaksi_detail/{id}": {
       "get": {
+        "tags": [
+          "transaksi_detail"
+        ],
         "description": "mendapatkan transaksi detail dengan menggunakan id",
+        "security": [
+          {
+            "bearertoken": []
+          }
+        ],
         "parameters": [
           {
             "name": "id",
@@ -902,7 +1137,15 @@
         }
       },
       "put": {
+        "tags": [
+          "transaksi_detail"
+        ],
         "description": "untuk mengedit data transaksi detail menggunakan id",
+        "security": [
+          {
+            "bearertoken": []
+          }
+        ],
         "parameters": [
           {
             "name": "id",
@@ -946,7 +1189,15 @@
         }
       },
       "delete": {
+        "tags": [
+          "transaksi_detail"
+        ],
         "description": "untuk menghapus data menggunakan id",
+        "security": [
+          {
+            "bearertoken": []
+          }
+        ],
         "parameters": [
           {
             "name": "id",
@@ -982,7 +1233,15 @@
     },
     "/upload": {
       "post": {
+        "tags": [
+          "gambar"
+        ],
         "description": "untuk melakukan upload gambar",
+        "security": [
+          {
+            "bearertoken": []
+          }
+        ],
         "requestBody": {
           "content": {
             "multipart/form-data": {
@@ -991,7 +1250,7 @@
                 "properties": {
                   "file": {
                     "type": "string",
-                    "format": "base64"
+                    "format": "binary"
                   }
                 }
               },
@@ -1015,7 +1274,15 @@
     },
     "/gambar/{id}": {
       "post": {
+        "tags": [
+          "gambar"
+        ],
         "description": "untuk melakukan edit pada suatu gambar melalui id",
+        "security": [
+          {
+            "bearertoken": []
+          }
+        ],
         "parameters": [
           {
             "name": "id",
@@ -1056,6 +1323,9 @@
         }
       },
       "delete": {
+        "tags": [
+          "gambar"
+        ],
         "description": "untuk menghapus gambar berdasarkan id nya",
         "parameters": [
           {
