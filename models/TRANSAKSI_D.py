@@ -1,4 +1,4 @@
-from static.for_connectionDB import koneksidatabase
+from for_connectionDB import koneksidatabase
 
 def get_all_transaksi_detail (page : int, limit : int, keyword: str = None):
     '''

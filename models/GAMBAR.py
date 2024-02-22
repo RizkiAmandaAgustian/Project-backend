@@ -1,4 +1,4 @@
-from static.for_connectionDB import koneksidatabase
+from for_connectionDB import koneksidatabase
 from flask import request
 import os,time
 

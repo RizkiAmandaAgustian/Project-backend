@@ -2,7 +2,7 @@ from models import TRANSAKSI,BARANG,TRANSAKSI_D,KERANJANG
 from flask import request
 from for_validate import for_validation_transaksi
 from flask_jwt_extended import get_jwt_identity
-from static.for_connectionDB import koneksidatabase
+from for_connectionDB import koneksidatabase
 
 def get_all_data_transaksi():
         '''
@@ -92,7 +92,7 @@ def coba_transaksi():
 
             transaksi = TRANSAKSI.coba_transaksi(nama_lengkap,alamat,user_id)
             TRANSAKSI_D.coba_transaksi(transaksi,test,cart['kuantitas'],total)
-            
+
             update_kuantitas_barang = produk['stok'] - stok_keranjang
             print(update_kuantitas_barang)
             BARANG.update_kuantitas(update_kuantitas_barang,produk['id'])

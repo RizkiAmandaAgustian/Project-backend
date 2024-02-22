@@ -1,4 +1,4 @@
-from static.for_connectionDB import koneksidatabase
+from for_connectionDB import koneksidatabase
 from models.KATEGORI import pick_id_kategori
 
 def get_allAAAAA():

@@ -1,4 +1,4 @@
-from static.for_connectionDB import koneksidatabase
+from for_connectionDB import koneksidatabase
 def login_users (username:str):
     '''
     login_users untuk mengambil data username dan password yang berada di database
