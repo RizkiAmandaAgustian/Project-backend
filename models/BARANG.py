@@ -1,54 +1,59 @@
 from for_connectionDB import koneksidatabase
 
-def get_all_data_barang (page : int, limit : int, keyword: str = None):
-    '''
-    melakukan eksekusi paginasi secara default dan menambahkan mekanisme search query apabila dibutuhkan dan kemudian mengembalikan data sesuai dengan 
-    yang ada di database 
-    '''
+def get_all_data_barang(page: int, limit: int, keyword: str = None, sort: str = None, tipe_data_sort: str = "asc"):
+    """
+    Melakukan eksekusi paginasi secara default dan menambahkan mekanisme search query apabila dibutuhkan dan kemudian mengembalikan data sesuai dengan
+    yang ada di database
+    bagian def diatas tulisan ini adalah nilai default yang bisa kita pakai di controller contoh di bagian tipe_data_sort
+    """
     connection = koneksidatabase.cursor()
-    try: 
-        page = (page - 1 ) * limit
+    try:
+        page = (page - 1) * limit
 
-        whereKeyword = ""
-
+        where_keyword = ""
         if keyword is not None:
-            whereKeyword = " WHERE nama_barang ilike %(keyword)s "
+            where_keyword = " WHERE nama_barang ILIKE %(keyword)s "
+
+        sorting = ""
+
+        if sort is not None or sort != '':
+            sorting = f" ORDER BY {sort} {tipe_data_sort}"
 
         query = f"""
-        SELECT id,nama_barang,deskripsi,harga,stok,kategori_id 
-        FROM barang 
-
-        {whereKeyword}
-
-        limit %(limit)s 
-        offset %(offset)s
-
+            SELECT id, nama_barang, deskripsi, harga, stok, kategori_id
+            FROM barang
+            {where_keyword}
+            {sorting}
+            LIMIT %(limit)s
+            OFFSET %(offset)s
         """
         values = {"limit": limit, "offset": page}
         if keyword is not None:
             values['keyword'] = '%'+keyword+'%'
 
-        connection.execute(query,values)
+        connection.execute(query, values)
         barangg = connection.fetchall()
         barang_baru = []
-        for barang in barangg :
+        for barang in barangg:
             baranggg = {
-                    'id' : barang [0],
-                    'nama_barang': barang [1],
-                    'deskripsi' : barang [2],
-                    'harga' : barang [3],
-                    'stok' : barang [4],
-                    'kategori_id' : [5],
+                "id": barang[0],
+                "nama_barang": barang[1],
+                "deskripsi": barang[2],
+                "harga": barang[3],
+                "stok": barang[4],
+                "kategori_id": barang[5],
             }
             barang_baru.append(baranggg)
-        
+
         koneksidatabase.commit()
-    except Exception as e :
+    except Exception as e:
         koneksidatabase.rollback()
-        raise e 
-    finally: 
+        raise e
+    finally:
         connection.close()
     return barang_baru
+
+
 
 
 def create_barang (nama_barang :str, deskripsi : str , harga :int , stok : int , kategori_id : int):

@@ -10,11 +10,14 @@ def get_all_data_barang():
     keyword = request.args.get('keyword')
     limit = int(request.args.get("limit", 3))
     page = int(request.args.get("page", 1))
-
+    sort = request.args.get('sort')
+    tipe_data_sort = request.args.get('tipe_data_sort')
     items = BARANG.get_all_data_barang(
         limit=limit,
         page=page,
-        keyword=keyword
+        keyword=keyword,
+        sort=sort,
+        tipe_data_sort=tipe_data_sort
     )
     
 
