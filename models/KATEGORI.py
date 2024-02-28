@@ -1,49 +1,63 @@
 from for_connectionDB import koneksidatabase
 
-def get_all_data_kategori (page : int, limit : int, keyword: str = None):
+def get_all_data_kategori(page: int, limit: int, keyword: str = None, tipe_data_sort: str = 'asc', parameter_sorting: str = None):
     '''
     menentukan paginasi dan keyword apabila keryword terisi maka akan melakukan pencarian apabila kosong akan melakukan menampilkan data dengan sistem paginasi yang diatur di controller 
     '''
     connection = koneksidatabase.cursor()
     try: 
-        page = (page - 1 ) * limit
+        page = (page - 1) * limit
 
-        whereKeyword = ""
+        where = []
 
         if keyword is not None:
-            whereKeyword = " WHERE label ilike %(keyword)s "
+            where.append('label ilike %(keyword)s')
+
+        whitelist_sort = ['id', 'label']
+        whitelist_tipe_sort = ['asc', 'desc']
+
+        if tipe_data_sort is not None :
+            if tipe_data_sort not in whitelist_tipe_sort:
+                raise ValueError('Harus dalam format asc atau desc'+','.join(whitelist_tipe_sort))
+            if parameter_sorting not in whitelist_sort:
+                raise ValueError('data yang dipilih tidak ada di dalam whitelist_tipe_sort'+','.join(whitelist_sort))
+            where.append(f' ORDER BY {parameter_sorting} {tipe_data_sort}')
+
+        if len(where) > 0:
+            wheres = "WHERE " + "".join(where)
 
         query = f"""
-        SELECT id,label 
+        SELECT id, label 
         FROM kategori 
-
-        {whereKeyword}
-
-        limit %(limit)s 
-        offset %(offset)s
-
+        {wheres}
+        LIMIT %(limit)s 
+        OFFSET %(offset)s
         """
+        print(query)
         values = {"limit": limit, "offset": page}
         if keyword is not None:
-            values['keyword'] = '%'+keyword+'%'
+            values['keyword'] = '%' + keyword + '%'
+        values['tipe_data_sort'] = tipe_data_sort
+        values['parameter_sorting'] = parameter_sorting
 
-        connection.execute(query,values)
+        connection.execute(query, values)
         kategorii = connection.fetchall()
         new_data = []
-        for kategori in kategorii :
+        for kategori in kategorii:
             data_baru = {
-                'id' : kategori [0],
-                'label': kategori [1],
+                'id': kategori[0],
+                'label': kategori[1],
             }
             new_data.append(data_baru)
         
         koneksidatabase.commit()
-    except Exception as e :
+    except Exception as e:
         koneksidatabase.rollback()
         raise e 
     finally: 
         connection.close()
     return new_data
+
 
 def create_kategori (label :str):
     '''

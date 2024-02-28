@@ -10,11 +10,15 @@ def get_all_data_kategori():
     limit = int(request.args.get("limit", 5))
     page = int(request.args.get("page", 1))
     keyword = request.args.get('keyword')
+    parameter_sorting = request.args.get('parameter_sorting')
+    tipe_data_sort = request.args.get('tipe_data_sort')
 
     return KATEGORI.get_all_data_kategori(
         limit=limit,
         page=page,
-        keyword=keyword
+        keyword=keyword,
+        parameter_sorting=parameter_sorting,
+        tipe_data_sort=tipe_data_sort
     )
 
 def create_kategori():

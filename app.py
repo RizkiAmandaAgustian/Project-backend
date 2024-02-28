@@ -79,7 +79,6 @@ def hapus_users():
 
 @app.get('/kategori')
 @jwt_required()
-@jwt_required()
 def get_all():
     return kategori.get_all_data_kategori()
 
