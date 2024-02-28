@@ -1,6 +1,6 @@
 from for_connectionDB import koneksidatabase
 
-def get_all_data_barang(page: int, limit: int, keyword: str = None, sort: str = None, tipe_data_sort: str = "asc"):
+def get_all_data_barang(page: int, limit: int, keyword: str = None, sort: str = None, tipe_data_sort: str = "asc", range1 : int = 0, range2 : int = 0):
     """
     Melakukan eksekusi paginasi secara default dan menambahkan mekanisme search query apabila dibutuhkan dan kemudian mengembalikan data sesuai dengan
     yang ada di database
@@ -10,27 +10,47 @@ def get_all_data_barang(page: int, limit: int, keyword: str = None, sort: str = 
     try:
         page = (page - 1) * limit
 
-        where_keyword = ""
+        wheres = []
         if keyword is not None:
-            where_keyword = " WHERE nama_barang ILIKE %(keyword)s "
+            wheres.append(" nama_barang ILIKE %(keyword)s ")
 
         sorting = ""
 
+        
         if sort is not None or sort != '':
+            if tipe_data_sort not in ['asc','desc']:
+                raise ValueError("hanya boleh asc atau desc")
+
+            if sort not in ['id','harga','stok']:
+                raise ValueError('kolom tidak ada di database')
             sorting = f" ORDER BY {sort} {tipe_data_sort}"
+
+            
+        if range1 is not None and range2 is not None:
+            wheres.append("harga between %(range1)s and %(range2)s")
+        
+
+        where =""
+        if len(wheres) > 0:
+            where =" Where " + " AND ".join(wheres)
 
         query = f"""
             SELECT id, nama_barang, deskripsi, harga, stok, kategori_id
             FROM barang
-            {where_keyword}
+            {where}
             {sorting}
             LIMIT %(limit)s
             OFFSET %(offset)s
         """
+        print(query)
         values = {"limit": limit, "offset": page}
         if keyword is not None:
             values['keyword'] = '%'+keyword+'%'
+        if range1 is not None and range2 is not None :
+            values['range1'] = range1
+            values['range2'] = range2
 
+            
         connection.execute(query, values)
         barangg = connection.fetchall()
         barang_baru = []
