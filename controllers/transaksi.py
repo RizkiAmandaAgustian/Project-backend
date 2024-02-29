@@ -10,10 +10,16 @@ def get_all_data_transaksi():
         '''
         limit = int(request.args.get("limit", 5))
         page = int(request.args.get("page", 1))
+        sort = request.args.get('sort')
+        keyword = request.args.get('keyword')
+        tipe_sort = request.args.get('tipe_sort')
 
         return TRANSAKSI.get_all_data_transaksi(
         limit=limit,
         page=page,
+        sort = sort,
+        tipe_sort= tipe_sort,
+        keyword=keyword
     )
 def create_transaksi():
     '''

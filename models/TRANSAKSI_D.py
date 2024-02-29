@@ -1,6 +1,6 @@
 from for_connectionDB import koneksidatabase
 
-def get_all_transaksi_detail (page : int, limit : int, keyword: str = None):
+def get_all_transaksi_detail (page : int, limit : int, keyword: str = None,sort : str = None, tipe_sort : str = None, range1 : int = 0, range0 : str = None, range2 : int = 0, tipe_keyword : str = None):
     '''
     menentukan paginasi dan keyword apabila keryword terisi maka akan melakukan pencarian apabila kosong akan melakukan menampilkan data dengan sistem paginasi yang diatur di controller 
     '''
@@ -9,22 +9,56 @@ def get_all_transaksi_detail (page : int, limit : int, keyword: str = None):
         page = (page - 1 ) * limit
 
         whereKeyword = ""
+        rangedata = ''
+        container = []
+        whitelist_transaksiD = ['id','transaksi_id','barang_id','kuantitas','harga']
+        whitelist_tipe = ['asc','desc']
+        #BUAT WHITELIST DAN RANGE HARGA
 
         if keyword is not None:
-            whereKeyword = " WHERE transaksi_id ilike %(keyword)s "
+            if tipe_keyword not in whitelist_transaksiD:
+                ValueError('data tidak ada dalam whitelist')    
+            container.append( F" {tipe_keyword} = %(keyword)s ")
+
+        if sort is not None and sort != '':
+            if sort not in whitelist_transaksiD :
+                ValueError('Data yang diinginkan tidak ada coba untuk memasukkan'.join(whitelist_transaksiD))
+            if tipe_sort not in whitelist_tipe:
+                ValueError('Data yang diinginkan tidak ada coba untuk memasukkan'.join(whitelist_tipe)) 
+            rangedata = (F'ORDER BY {sort} {tipe_sort}')
+        
+        if range0 is not None :
+            if range0  not in whitelist_transaksiD :
+                ValueError ('Data tidak ada coba pastikan anda memasukkan salah satu dari '.join(whitelist_transaksiD))
+            container.append(f" {range0} BETWEEN %(range1)s AND %(range2)s")
+
+        if len(container)>0 :
+            container_data = "Where " + " AND ".join(container)
+
 
         query = f"""
         SELECT id,transaksi_id,barang_id,kuantitas,harga FROM transaksi_detail 
 
-        {whereKeyword}
+        {container_data}
+
+        {rangedata}
+
 
         limit %(limit)s 
         offset %(offset)s
 
         """
+        print(query)
         values = {"limit": limit, "offset": page}
         if keyword is not None:
-            values['keyword'] = '%'+keyword+'%'
+            values['keyword'] = keyword
+            
+        if range0 is not None:
+            values['range1'] = range1
+            values['range2'] = range2
+
+
+        
 
         connection.execute(query,values)
         result = connection.fetchall()

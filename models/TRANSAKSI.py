@@ -1,7 +1,7 @@
 from for_connectionDB import koneksidatabase
 from flask_jwt_extended import get_jwt_identity
 
-def get_all_data_transaksi (page : int, limit : int, keyword: str = None):
+def get_all_data_transaksi (page : int, limit : int, keyword: str = None, sorting : str = None,sort : str = None, tipe_sort : str = None):
     '''
     menentukan paginasi dan keyword apabila keryword terisi maka akan melakukan pencarian apabila kosong akan melakukan menampilkan data dengan sistem paginasi yang diatur di controller 
     '''
@@ -10,19 +10,40 @@ def get_all_data_transaksi (page : int, limit : int, keyword: str = None):
         page = (page - 1 ) * limit
 
         whereKeyword = ""
+        container_data = []
+        whitelist_user = ['user_id','alamat','nama_lengkap','id']
+        tipedatawhitelist_user = ['asc','desc']
+
+
 
         if keyword is not None:
-            whereKeyword = " WHERE nama_lengkap ilike %(keyword)s "
+            container_data.append(" nama_lengkap ilike %(keyword)s")
+        
+
+       
+        if sort is not None and sort != '' :
+            if tipe_sort  not in tipedatawhitelist_user: 
+                raise ValueError ('Tipe yang seharusnya dimasukkan adalah '+''.join(tipedatawhitelist_user))
+            if sort not in whitelist_user:
+                raise ValueError('Tipe yang harusnya dimasukkan adalah '+''.join(whitelist_user))
+            container_data.append(F'ORDER BY {sort} {tipe_sort}')
+
+        if len(container_data)>0:
+            perintah = 'WHERE' + "".join(container_data)
+            
+
+
 
         query = f"""
         SELECT id, nama_lengkap, alamat, tanggal_transaksi, user_id FROM transaksi 
 
-        {whereKeyword}
+        {perintah}
 
         limit %(limit)s 
         offset %(offset)s
 
         """
+        print(query)
         values = {"limit": limit, "offset": page}
         if keyword is not None:
             values['keyword'] = '%'+keyword+'%'
