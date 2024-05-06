@@ -1,6 +1,6 @@
 from dotenv import load_dotenv
 load_dotenv ()
-import flask
+import flask #better from flask import Flask
 from controllers import barang,keranjang,transaksi,transaksi_d,kategori,user,sql,gambar
 from flask_bcrypt import Bcrypt
 from flask_jwt_extended import(
@@ -10,7 +10,7 @@ from flask_jwt_extended import(
 )
 from flask_cors import CORS
 
-app = flask.Flask(__name__)
+app = flask.Flask(__name__) #setelah diubah import nya diatas nantinya disini diisi app = Flask (__name__) dan app disini nantinya akan berdampak terhadap pemaanggilan route @ dibawahnya
 CORS(app)
 bcrypt = Bcrypt(app)
 jwt = JWTManager(app)
@@ -47,6 +47,29 @@ app.register_blueprint(swaggerui_blueprint)
 @app.post('/users/login')
 def login_dulu():
     return user.user_login ()
+
+'''
+@app.post('/users/login')
+def login_dulu():
+    return user.user_login ()
+
+dalam kode ini kan saya menggunakan app sebagai variabel dan dipanggil dalam @app kemudian menggunakan http method post 
+dan mendefiniskan fungsi login_dulu(): dan mengembalikan return hasil dari user.user_login() bagaimana 
+fungsi login_dulu() bisa berjalan tanpa dipanggil ?
+
+Dalam kerangka kerja web seperti Flask, dekorator @app.post('/users/login') digunakan untuk mengaitkan rute tertentu 
+dengan fungsi penangan permintaan HTTP POST yang sesuai. Ketika permintaan POST diterima pada URL /users/login, 
+Flask akan memanggil fungsi login_dulu() untuk menangani permintaan tersebut.
+
+Penting untuk dicatat bahwa di sini Anda hanya mendefinisikan fungsi login_dulu() sebagai penangan untuk permintaan POST 
+pada rute tertentu. Itu tidak akan dieksekusi atau "berjalan" secara otomatis. Sebagai gantinya, ketika permintaan POST diterima 
+pada URL /users/login, Flask akan secara otomatis memanggil fungsi login_dulu() yang telah Anda definisikan, 
+sesuai dengan aturan yang Anda tentukan dengan menggunakan dekorator @app.post('/users/login').
+
+Jadi, meskipun Anda tidak secara eksplisit memanggil login_dulu() dalam kode Anda, itu akan dipanggil oleh Flask secara otomatis 
+ketika permintaan POST diterima pada rute yang sesuai. Semua fungsi yang Anda definisikan dengan dekorator seperti @app.post() 
+atau @app.get() dalam Flask akan dipanggil oleh Flask sesuai dengan permintaan yang diterima.
+'''
 
 @app.get('/validate_login')
 @jwt_required()
@@ -129,9 +152,14 @@ def hapus_barang(id):
 def edit_barangg(id): 
     return barang.editt_barang (id)
 
-@app.post('/barang/<int:id>/stok')
+@app.post('/barang/tambah_stok/<int:id>')
 @jwt_required()
-def stok (id):
+def tambahh_stok(id):
+    return barang.tambah_stok(id)
+
+@app.put('/barang/update_stok/<int:id>')
+@jwt_required()
+def updatee_stok(id):
     return barang.update_stok(id)
 
 #KERANJANG

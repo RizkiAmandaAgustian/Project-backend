@@ -23,7 +23,7 @@ def edit_gambar(id):
         ambil = connection.fetchone()
         
     except Exception as e :
-        koneksidatabase.rollback()
+        koneksidatabase.rollback() #SECARA GARIS BESAR MENGECEK ID APAKAH ID DAN  GAMBAR DI SITU ADA APA TIDAK SEBELUM DI EKSEKUSI 
         raise e 
     finally : 
         connection.close()
@@ -32,38 +32,40 @@ def edit_gambar(id):
             return 'gambar tidak tersedia'
         
         
-    data = {"id": ambil[0], "image": ambil[1]}
+    data = {"id": ambil[0], "image": ambil[1]} #Apabila gambar tersedia maka ambil id dan gambar tersebut
 
     # Validasi file ada atau tidak
-    if "file" not in request.files:
+    if "file" not in request.files: #melakukan pengecekan apakah file adalah nama untuk pengupload an gambar
         return "No file part"
 
-    file = request.files["file"]
+    file = request.files["file"]#melakukan pengecekan apakah file adalah nama untuk pengupload an gambar
 
-    if file.filename == "":
+    if file.filename == "" and file.filename is not None:#pengecekan apakah file berisi string kosong atau tidak
         return "No selected file"
 
-    location_new = None
+    # location_new = None
     try:
         # Hapus file lama
-        if os.path.exists(data["image"]):
+        if os.path.exists(data["image"]): #Jika gambar tadi ada maka hapus gambar tersebut
             os.remove(data["image"])
 
         # Simpan file baru
-        location_new = "static/uploads/" + str(time.time()) + "_" + file.filename
+        location_new = "static/uploads/" + str(time.time()) + "_" + file.filename #lokasi penyimpanan dan format nama
         file.save(location_new)
 
         # Update database
-        connection = koneksidatabase.cursor()
-        connection.execute("UPDATE image SET image = %s WHERE id = %s", (location_new, id))
+        connection = koneksidatabase.cursor() #buka koneksi lagi
+        connection.execute("UPDATE image SET image = %s WHERE id = %s", (location_new, id)) #melakukan update data dengan melihat id nya tadi
         koneksidatabase.commit()
-        connection.close()
     except Exception as e:
         if location_new is not None:
             os.remove(location_new)
         raise e
+    finally:
+        connection.close()
 
-    return "File edited successfully"
+
+    return '',200
 
 def pick_id_gambar(id) :
     connection = koneksidatabase.cursor()

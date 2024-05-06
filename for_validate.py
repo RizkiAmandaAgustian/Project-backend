@@ -1,4 +1,5 @@
 from models import KATEGORI,BARANG,TRANSAKSI
+from for_connectionDB import koneksidatabase
 def for_validation_kategori (label):
     error = []
     if label is None :
@@ -92,3 +93,16 @@ def for_validation_users1 (username, password): #VALIDASI DISINI SESUAI DENGAN Y
     if password is None or password == '' :
         error.append('masukkan password')
         return {'error':error}
+    
+def for_validate_username (username):
+    error = []
+    connection = koneksidatabase.cursor()
+    try:
+        connection.execute('SELECT username from users where username = %s',(username,))
+        exist_username = connection.fetchone()
+        if exist_username is not None:
+            error.append('Username tersebut sudah terdaftar coba username lain')
+    finally:
+        connection.close()
+    if len(error) > 0 :
+        return{'eror':error}

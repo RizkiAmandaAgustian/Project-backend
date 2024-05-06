@@ -1,4 +1,5 @@
 from for_connectionDB import koneksidatabase
+import os
 def login_users (username:str):
     '''
     login_users untuk mengambil data username dan password yang berada di database
@@ -11,7 +12,7 @@ def login_users (username:str):
         masuk = koneksi.fetchone()
         if masuk is None:
             return None
-        return{'username': masuk[0],'password':masuk[1],'id': masuk[2]}
+        return{'username': masuk[0],'password': masuk [1],'id': masuk[2]}
     except Exception as e :
         koneksidatabase.rollback()
         raise e 
@@ -70,13 +71,13 @@ def delete_users (id : int):
     finally :
         connection.close()
 
-def edit_users (id : int,username : str, password : str , nama_lengkap : str):
+def edit_users (id : int,username : str, pwhash : str , nama_lengkap : str):
     '''
     edit_users untuk mengedit/update suatu data users di database dengan id yang valid 
     '''
     connection = koneksidatabase.cursor()
     try:
-        connection.execute('UPDATE users SET username =%s, password = %s, nama_lengkap = %s WHERE id = %s',(username,password,nama_lengkap,id))
+        connection.execute('UPDATE users SET username =%s, password = %s, nama_lengkap = %s WHERE id = %s',(username,pwhash,nama_lengkap,id))
         koneksidatabase.commit()
     except Exception as e :
         koneksidatabase.rollback()

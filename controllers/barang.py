@@ -8,12 +8,20 @@ def get_all_data_barang():
     get_all_data_barang mengambil semua data berdasarkan sistem paginasi dengan default 3 data dalam 1 halaman dan menggunakan keyword apabila ingin digunakan 
     '''
     keyword = request.args.get('keyword')
-    limit = int(request.args.get("limit", 3))
-    page = int(request.args.get("page", 1))
+    limit = int(request.args.get('limit', 3))
+    page = int(request.args.get('page', 1))
     sort = request.args.get('sort')
     tipe_data_sort = request.args.get('tipe_data_sort')
     range1 = request.args.get('range1')    
     range2 = request.args.get('range2')
+    '''   
+    request.args.get:
+
+    Digunakan untuk mengambil nilai dari argumen query string dalam URL.
+    Berguna saat Anda ingin mendapatkan nilai dari parameter yang dikirim melalui URL, misalnya dalam permintaan GET.
+    Contoh penggunaan: Jika URL adalah http://example.com/?name=John&age=30, Anda dapat menggunakan request.args.get('name') untuk 
+    mendapatkan nilai 'John'.
+    Biasanya digunakan untuk permintaan HTTP GET.'''
     items = BARANG.get_all_data_barang(
         limit=limit,
         page=page,
@@ -23,7 +31,10 @@ def get_all_data_barang():
         range1=range1,
         range2=range2
     )
-    
+    '''
+    named parameter agar memudahkan tidak urut tidak apa-apa namun dalam BARANG.get_all_data_barang harus memiliki value yang
+    sama dengan named parameter yang ada 
+    '''
 
     return items
     
@@ -41,6 +52,13 @@ def create_barang():
     harga = request.form.get('harga')
     stok = request.form.get('stok')
     kategori_id = request.form.get('kategori_id')
+    '''
+    Digunakan untuk mengambil nilai dari data formulir yang dikirim dalam permintaan POST.
+    Berguna saat Anda ingin mendapatkan nilai dari input formulir yang dikirim melalui permintaan POST.
+    Contoh penggunaan: Jika ada input formulir dengan nama 'username' dan nilai 'john_doe' yang dikirim melalui permintaan POST, 
+    Anda dapat menggunakan request.form.get('username') untuk mendapatkan nilai 'john_doe'.
+    Biasanya digunakan untuk permintaan HTTP POST.
+    '''
 
     validated = for_validation_barang (nama_barang,deskripsi,harga,stok,kategori_id)
     if validated is not None :
@@ -92,7 +110,12 @@ def editt_barang(id):
     BARANG.edit_barang(id,nama_barang,deskripsi,harga,stok,kategori_id)
     return '', 200
 
-def update_stok(id):
+def tambah_stok(id):
     stok = request.form.get('stok')
-    BARANG.update_stok(stok,id)
+    BARANG.tambah_stok(stok,id)
     return '', 200
+
+def update_stok(id):
+    stok = request.form.get('stock')
+    BARANG.update_kuantitas(stok,id)
+    return '',200

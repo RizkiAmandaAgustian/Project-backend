@@ -11,25 +11,25 @@ def get_all_data_transaksi (page : int, limit : int, keyword: str = None, sortin
 
         whereKeyword = ""
         container_data = []
-        whitelist_user = ['user_id','alamat','nama_lengkap','id']
-        tipedatawhitelist_user = ['asc','desc']
+        whitelist_user = ['user_id','alamat','nama_lengkap','id'] #memberikan daftar pilihan dalam bentuk tipe list apa yang bisa dicari
+        tipedatawhitelist_user = ['asc','desc'] # memberikan pilihan urutan sortir desc atau asc
 
 
 
         if keyword is not None:
-            container_data.append(" nama_lengkap ilike %(keyword)s")
+            container_data.append(" where nama_lengkap ilike %(keyword)s") #Where ditaruh disini karena order tidak membutuhkan Where ketika dipanggil
         
 
        
-        if sort is not None and sort != '' :
-            if tipe_sort  not in tipedatawhitelist_user: 
+        if sort is not None and sort != '' : #jika data tidak kosong atau tidak berisi string kosong maka lakukan kode berikut
+            if tipe_sort  not in tipedatawhitelist_user: #jika tipe sort tidak dalam tipedatawhitelist_user maka munculkan eror
                 raise ValueError ('Tipe yang seharusnya dimasukkan adalah '+''.join(tipedatawhitelist_user))
-            if sort not in whitelist_user:
+            if sort not in whitelist_user: #jika sort tidak berada pada whitelist_user maka munculkan eror
                 raise ValueError('Tipe yang harusnya dimasukkan adalah '+''.join(whitelist_user))
             container_data.append(F'ORDER BY {sort} {tipe_sort}')
 
         if len(container_data)>0:
-            perintah = 'WHERE' + "".join(container_data)
+            perintah = " ".join(container_data) #Tidak butuh AND karena Order by tidak memerlukan AND
             
 
 
@@ -142,7 +142,8 @@ def coba_transaksi(nama_lengkap,alamat,user_id):
     connection = koneksidatabase.cursor()
     try:
         connection.execute('INSERT INTO transaksi (nama_lengkap,alamat,user_id) VALUES (%s,%s,%s) RETURNING id',(nama_lengkap,alamat,user_id)) 
-        return connection.fetchone()[0] #berpengaruh pada data yang akan kita ambil di bagian returning
+        #Returning id untuk mengambil id transaksi yang berguna untuk langsung memasukkan id transaksi ke transaksi detail
+        return connection.fetchone()[0] #fetch atau pengambilan data di bagian returning berhubung yang diambil hanya 1 maka berisi 0
     except Exception as e :
         raise e 
     finally: 
